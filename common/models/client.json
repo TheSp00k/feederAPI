@@ -1,0 +1,41 @@
+{
+  "name": "client",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "companycode": {
+      "type": "string"
+    },
+    "licenseid": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "requesttime": {
+      "type": "date"
+    },
+    "requestdelay": {
+      "type": "number"
+    },
+    "sendrequests": {
+      "type": "boolean"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "products": {
+      "type": "hasMany",
+      "model": "product",
+      "foreignKey": "clientid"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

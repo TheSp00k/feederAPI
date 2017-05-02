@@ -1,0 +1,41 @@
+{
+  "name": "request",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date"
+    },
+    "clientid": {
+      "type": "string"
+    },
+    "customerid": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "customer": {
+      "type": "belongsTo",
+      "model": "customer",
+      "foreignKey": "customerid"
+    },
+    "products": {
+      "type": "hasMany",
+      "model": "product",
+      "foreignKey": "requestid",
+      "through": "productrequest"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

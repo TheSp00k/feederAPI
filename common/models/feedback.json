@@ -1,0 +1,62 @@
+{
+  "name": "feedback",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "productid": {
+      "type": "string"
+    },
+    "commentheader": {
+      "type": "string"
+    },
+    "commentcontent": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date"
+    },
+    "totalratingscore": {
+      "type": "number"
+    },
+    "approved": {
+      "type": "boolean"
+    },
+    "rejected": {
+      "type": "boolean"
+    },
+    "clientid": {
+      "type": "string"
+    },
+    "customerid": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "ratings": {
+      "type": "hasMany",
+      "model": "rating",
+      "foreignKey": "feedbackid"
+    },
+    "client": {
+      "type": "belongsTo",
+      "model": "client",
+      "foreignKey": "clientid"
+    },
+    "product": {
+      "type": "belongsTo",
+      "model": "product",
+      "foreignKey": "productid"
+    },
+    "customer": {
+      "type": "belongsTo",
+      "model": "customer",
+      "foreignKey": "customerid"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

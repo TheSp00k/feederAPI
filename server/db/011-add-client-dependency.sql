@@ -1,0 +1,17 @@
+ALTER TABLE `appuser`
+ADD COLUMN `clientid` VARCHAR(100) NULL AFTER `email`;
+
+ALTER TABLE `product`
+CHANGE COLUMN `id` `id` VARCHAR(255) NOT NULL,
+CHANGE COLUMN `clientid` `clientid` VARCHAR(100) NULL DEFAULT NULL ;
+
+ALTER TABLE `client`
+CHANGE COLUMN `id` `id` VARCHAR(100) NOT NULL ;
+
+ALTER TABLE `feedback`
+CHANGE COLUMN `productid` `productid` VARCHAR(255) NULL DEFAULT NULL,
+ADD COLUMN `clientid` VARCHAR(100) NULL AFTER `approved`;
+
+ALTER TABLE `rating`
+ADD COLUMN `clientid` VARCHAR(100) NULL AFTER `feedbackid`,
+ADD COLUMN `created` TIMESTAMP NOT NULL AFTER `clientid`;

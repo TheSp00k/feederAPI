@@ -1,0 +1,37 @@
+{
+  "name": "appuser",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "clientid": {
+      "type": "string"
+    },
+    "username": false,
+    "realm": false,
+    "credentials": false,
+    "challenges": false,
+    "emailVerified": false,
+    "verificationToken": false,
+    "status": false,
+    "lastUpdated": false
+  },
+  "validations": [],
+  "relations": {
+    "client": {
+      "type": "belongsTo",
+      "model": "client",
+      "foreignKey": "clientid"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

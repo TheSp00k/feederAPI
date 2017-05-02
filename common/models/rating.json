@@ -1,0 +1,32 @@
+{
+  "name": "rating",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number"
+    },
+    "feedbackid": {
+      "type": "string"
+    },
+    "clientid": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "client": {
+      "type": "belongsTo",
+      "model": "client",
+      "foreignKey": "clientid"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

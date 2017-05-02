@@ -1,0 +1,34 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "api": {
+    "name": "api",
+    "connector": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "api",
+    "password": "root",
+    "user": "root"
+  },
+  "myEmailDataSource": {
+    "name": "myEmailDataSource",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "email-smtp.us-west-2.amazonaws.com",
+        "secure": true,
+        "port": 465,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "AKIAJVBH24XNZHYEJNQQ",
+          "pass": "AtnIp826n+ng1JmFMnfvrO54wHLMSXxvYIPE3NlGPGWo"
+        }
+      }
+    ]
+  }
+}

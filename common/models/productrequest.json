@@ -1,0 +1,31 @@
+{
+  "name": "productrequest",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "productid": {
+      "type": "string"
+    },
+    "requestid": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "product": {
+      "type": "belongsTo",
+      "model": "product",
+      "foreignKey": "productid"
+    },
+    "request": {
+      "type": "belongsTo",
+      "model": "request",
+      "foreignKey": "requestid"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

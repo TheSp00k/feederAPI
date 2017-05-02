@@ -1,0 +1,29 @@
+{
+  "name": "rawrequest",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "products": {
+      "type": "Object"
+    },
+    "customer": {
+      "type": "Object"
+    },
+    "licenseid": {
+      "type": "string"
+    },
+    "clientid": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

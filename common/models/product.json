@@ -1,0 +1,50 @@
+{
+  "name": "product",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date"
+    },
+    "clientid": {
+      "type": "string"
+    },
+    "photourl": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "feedbacks": {
+      "type": "hasMany",
+      "model": "feedback",
+      "foreignKey": "productid"
+    },
+    "client": {
+      "type": "belongsTo",
+      "model": "client",
+      "foreignKey": "clientid"
+    },
+    "requests": {
+      "type": "hasMany",
+      "model": "request",
+      "foreignKey": "productid",
+      "through": "productrequest"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
