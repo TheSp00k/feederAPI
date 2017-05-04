@@ -7,28 +7,30 @@ var jobsDoneCount = 0;
 var restartAfterJobs = 10;
 
 worker.addFunction('sendFeedback', (job) => {
+	console.log(job.payload.toString());
+	
 	var data = JSON.parse(job.payload.toString());
 	var feedbackRequest = app.models.feedback;
 
 
 	// Report.working(app, data.report);
-	function sendFeedback(item) {
-		if (item) {
-			return Client.upsert(item, (err, upsertInstance) => {
-				if (err) {
-					Report.failed(app, data.report, err);
-					return job.reportError('failed');
-				}
-				importItem(data.items.shift());
-			});
-		}
+	// function sendFeedback(item) {
+	// 	if (item) {
+	// 		return Client.upsert(item, (err, upsertInstance) => {
+	// 			if (err) {
+	// 				Report.failed(app, data.report, err);
+	// 				return job.reportError('failed');
+	// 			}
+	// 			importItem(data.items.shift());
+	// 		});
+	// 	}
 
-		j.on('error', (err) => {
-			console.log(err);
-			job.reportError(err);
-		});
+	// 	j.on('error', (err) => {
+	// 		console.log(err);
+	// 		job.reportError(err);
+	// 	});
 
-	}
+	// }
 
-	sendFeedback(data.items.shift());
+	// sendFeedback(data.items.shift());
 });

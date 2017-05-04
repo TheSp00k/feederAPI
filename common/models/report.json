@@ -1,0 +1,35 @@
+{
+    "name": "report",
+    "plurar": "reports",
+    "base": "PersistedModel",
+    "strict": true,
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "status": "number",
+        "object": "string",
+        "error": "string",
+        "created": "date",
+        "updated": "date",
+        "userid": "number"
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [
+        {
+            "accessType": "*",
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "blsAdmin",
+            "permission": "ALLOW",
+            "property": "*"
+        }
+    ],
+    "methods": {}
+}

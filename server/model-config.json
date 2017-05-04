@@ -1,75 +1,79 @@
 {
-  "_meta": {
-    "sources": [
-      "loopback/common/models",
-      "loopback/server/models",
-      "../common/models",
-      "./models"
-    ],
-    "mixins": [
-      "loopback/common/mixins",
-      "loopback/server/mixins",
-      "../common/mixins",
-      "./mixins"
-    ]
-  },
-  "User": {
-    "dataSource": "api",
-    "public": false
-  },
-  "AccessToken": {
-    "dataSource": "api",
-    "public": false
-  },
-  "ACL": {
-    "dataSource": "api",
-    "public": false
-  },
-  "RoleMapping": {
-    "dataSource": "api",
-    "public": false
-  },
-  "Role": {
-    "dataSource": "api",
-    "public": false
-  },
-  "appuser": {
-    "dataSource": "api",
-    "public": true
-  },
-  "Email": {
-    "dataSource": "myEmailDataSource"
-  },
-  "client": {
-    "dataSource": "api",
-    "public": true
-  },
-  "product": {
-    "dataSource": "api",
-    "public": true
-  },
-  "feedback": {
-    "dataSource": "api",
-    "public": true
-  },
-  "rating": {
-    "dataSource": "api",
-    "public": true
-  },
-  "request": {
-    "dataSource": "api",
-    "public": true
-  },
-  "customer": {
-    "dataSource": "api",
-    "public": true
-  },
-  "productrequest": {
-    "dataSource": "api",
-    "public": true
-  },
-  "rawrequest": {
-    "dataSource": "api",
-    "public": true
-  }
+	"_meta": {
+		"sources": [
+			"loopback/common/models",
+			"loopback/server/models",
+			"../common/models",
+			"./models"
+		],
+		"mixins": [
+			"loopback/common/mixins",
+			"loopback/server/mixins",
+			"../common/mixins",
+			"./mixins"
+		]
+	},
+	"User": {
+		"dataSource": "api",
+		"public": false
+	},
+	"AccessToken": {
+		"dataSource": "api",
+		"public": false
+	},
+	"ACL": {
+		"dataSource": "api",
+		"public": false
+	},
+	"RoleMapping": {
+		"dataSource": "api",
+		"public": false
+	},
+	"Role": {
+		"dataSource": "api",
+		"public": false
+	},
+	"appuser": {
+		"dataSource": "api",
+		"public": true
+	},
+	"Email": {
+		"dataSource": "myEmailDataSource"
+	},
+	"client": {
+		"dataSource": "api",
+		"public": true
+	},
+	"product": {
+		"dataSource": "api",
+		"public": true
+	},
+	"feedback": {
+		"dataSource": "api",
+		"public": true
+	},
+	"rating": {
+		"dataSource": "api",
+		"public": true
+	},
+	"request": {
+		"dataSource": "api",
+		"public": true
+	},
+	"customer": {
+		"dataSource": "api",
+		"public": true
+	},
+	"productrequest": {
+		"dataSource": "api",
+		"public": true
+	},
+	"rawrequest": {
+		"dataSource": "api",
+		"public": true
+	},
+	"report": {
+		"dataSource": "api",
+		"public": true
+	}
 }
