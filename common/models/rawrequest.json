@@ -19,7 +19,8 @@
       "type": "string"
     },
     "created": {
-      "type": "date"
+      "type": "date",
+      "default": "$now"
     }
   },
   "validations": [],

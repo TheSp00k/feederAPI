@@ -13,6 +13,10 @@ module.exports = function (app) {
 					var hours = moment(clientListInstance[i].requesttime).format('H');
 					var minutes = moment(clientListInstance[i].requesttime).format('m');
 				}
+
+
+
+
 				var rule = { hour: parseInt(hours), minute: parseInt(minutes) };
 				// rule = '* * * * * *';
 				schedule.scheduleJob(rule, () => {
@@ -23,10 +27,11 @@ module.exports = function (app) {
 						}
 						var gearmanClient = gearmanode.client({ port: 4730 });
 						var gearmanJob = gearmanClient.submitJob('feedbackRequest',
-							JSON.stringify({ clientid: clientListInstance[i].id, report: report }),
+							JSON.stringify({ clientid: clientListInstance[i].id, requestdelay: clientListInstance[i].requestdelay, report: report }),
 							{ background: true, unique: 'rep-' + report.id });
 						gearmanJob.on('submited', (data) => {
 							gearmanClient.close();
+							console.log('job submited');
 							console.log('clientid: ' + clientListInstance[i].id + ' (' + clientListInstance[i].name + ') on ' + clientListInstance[i].requesttime + ' minute');
 						});
 					});

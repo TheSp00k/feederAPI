@@ -29,7 +29,6 @@ module.exports = (Product) => {
 	Product.import = function (data, callback) {
 		var async = require('async');
 		var response = [];
-// console.log(data);
 		data = data.constructor === Array ? data : [data];    // convert single object to array
 		async.each(data, (item, cb) => {
 			Product.upsert(item, (upsertError, upsertInstance) => {
@@ -58,7 +57,7 @@ module.exports = (Product) => {
 		{
 			http: { path: '/totalratingscore', verb: 'get' },
 			accepts: [
-				{ arg: 'productid', type: 'string' }
+				{ arg: 'productid', type: 'number' }
 			],
 			returns: { arg: 'totalscore', root: true, type: 'number' }
 		}

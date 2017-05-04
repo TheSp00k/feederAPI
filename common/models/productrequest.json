@@ -7,7 +7,7 @@
   },
   "properties": {
     "productid": {
-      "type": "string"
+      "type": "number"
     },
     "requestid": {
       "type": "number"

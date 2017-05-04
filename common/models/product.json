@@ -6,9 +6,8 @@
     "validateUpsert": true
   },
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
+    "productnumber": {
+      "type": "string"
     },
     "name": {
       "type": "string"
@@ -42,7 +41,8 @@
       "type": "hasMany",
       "model": "request",
       "foreignKey": "productid",
-      "through": "productrequest"
+      "through": "productrequest",
+      "keyThrough": "productid"
     }
   },
   "acls": [],

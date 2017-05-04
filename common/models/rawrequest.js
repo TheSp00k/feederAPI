@@ -31,22 +31,40 @@ module.exports = (RawRequest) => {
 			return next(error);
 		}
 
-		RawRequest.app.models.customer.upsert(customer, (err, customerInstance) => {
+
+		RawRequest.app.models.customer.findOne({where: {and: [{email: customer.email}, {clientid: ctx.instance.clientid}]}}, (err, customerInstance) => {
 			if (err) {
 				return next(err);
 			}
-			request = {
-				type: 'request',
-				status: 'created',
-				clientid: ctx.instance.clientid,
-				customerid: customerInstance.id
-			};
-			RawRequest.app.models.request.upsert(request, (err, requestInstance) => {
+			if (customerInstance) {
+				customer.id = customerInstance.id;
+			}
+			RawRequest.app.models.customer.upsert(customer, (err, customerInstance) => {
 				if (err) {
 					return next(err);
 				}
-				RawRequest.app.models.product.import(products, (err, productInstance) => {
-					next(err);
+				request = {
+					type: 'request',
+					status: 'created',
+					clientid: ctx.instance.clientid,
+					customerid: customerInstance.id
+				};
+				RawRequest.app.models.request.upsert(request, (err, requestInstance) => {
+					if (err) {
+						return next(err);
+					}
+					RawRequest.app.models.product.import(products, (err, productInstance) => {
+						if (err) {
+							return next(err);
+						}
+						let productRequests = [];
+						for (let i = 0; i < products.length; i++) {
+							productRequests.push({requestid: requestInstance.id, productid: products[i].id});
+						}
+						RawRequest.app.models.productrequest.import(productRequests, (err, productInstance) => {
+							next(err);
+						});
+					});
 				});
 			});
 		});

@@ -1,5 +1,6 @@
 {
   "name": "request",
+  "plural": "requests",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -33,7 +34,8 @@
       "type": "hasMany",
       "model": "product",
       "foreignKey": "requestid",
-      "through": "productrequest"
+      "through": "productrequest",
+      "keyThrough": "requestid"
     }
   },
   "acls": [],

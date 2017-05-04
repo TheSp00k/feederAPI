@@ -1,0 +1,11 @@
+ALTER TABLE `product`
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ,
+ADD COLUMN `productnumber` VARCHAR(255) NULL AFTER `id`,
+DROP INDEX `UNIQUE_PRODUCT` ,
+ADD UNIQUE INDEX `UNIQUE_PRODUCT` (`clientid` ASC, `productnumber` ASC);
+
+ALTER TABLE `productrequest`
+CHANGE COLUMN `productid` `productid` INT(11) NULL DEFAULT NULL ;
+
+ALTER TABLE `feedback`
+CHANGE COLUMN `productid` `productid` INT(11) NULL DEFAULT NULL ;
