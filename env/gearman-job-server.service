@@ -1,0 +1,14 @@
+[Unit]
+Description=gearman job control server
+After=mysql.service
+
+[Service]
+ExecStartPre=/usr/bin/install -d -o gearman /run/gearman
+PermissionsStartOnly=true
+User=gearman
+Restart=always
+PIDFile=/run/gearman/server.pid
+ExecStart=/usr/local/sbin/gearmand --listen=127.0.0.1 --pid-file=/run/gearman/server.pid --log-file=/var/log/gearmand.log --queue-type=MySQL --mysql-host=127.0.0.1 --mysql-user=root --mysql-password=root --mysql-db=api --mysql-table=gearman_queue
+
+[Install]
+WantedBy=multi-user.target

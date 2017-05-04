@@ -29,6 +29,9 @@ Vagrant.configure(2) do |config|
   # debugging
   config.vm.network "forwarded_port", guest: 5858, host: 5858
   config.vm.network "forwarded_port", guest: 8080, host: 8080
+  # Supervisord WEB control panel
+  config.vm.network "forwarded_port", guest: 9001, host: 9001
+  config.vm.network "forwarded_port", guest: 9200, host: 9200
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -69,6 +72,8 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   # puppet
   #config.vm.provision :shell, inline: "apt-get install --yes puppet"
+  config.vm.provision "file", source: "env/gearman-job-server.service", destination: "/tmp/gearman-job-server.service"
+  config.vm.provision "file", source: "env/supervisord.service", destination: "/tmp/supervisord.service"
   config.vm.provision :shell, path: "env/bootstrap.sh"
 
   #config.vm.provision :puppet do |puppet|
