@@ -42,6 +42,8 @@ worker.addFunction('feedbackRequest', (job) => {
 			Report.failed(app, data.report, err);
 			return job.reportError('failed');
 		}
+
+		
 		var emailHtml = 'Hi,<br><br>' +
 			'Your request for exporting clients has been processed.<br>' +
 			'You can download clients in ' + type + ' format from <a href="' + url + '">here</a>';
