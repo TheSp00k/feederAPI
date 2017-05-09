@@ -3,10 +3,21 @@
 module.exports = (Request) => {
 	Request.sendFeedbackRequest = (info, next) => {
 
-		var mailer = require('../../server/lib/mailer');
-		var emailContent = `Ačiū, kad pirkote ${info.client.name} parduotuvėje šiuos produktus: `;
+		Request.app.models.client.findById(info.client.id, (err, clientInstance) => {
+			if (err) {
+				return next(err);
+			}
+			if (!clientInstance.id) {
+				let err = new Error();
+				err.code = 404;
+				err.message = `Client(${info.client.id}) not found`;
+				return next(err);
+			}
+			let mailer = require('../../server/lib/mailer');
+			let emailContent = `Ačiū, kad pirkote ${clientInstance.name} parduotuvėje šiuos produktus: `;
 
-		var css = `
+
+			let css = `
 		<style type="text/css">
 			* [lang~="x-star-wrapper"]:hover *[lang~="x-star-number"]{
 				color: #119da2 !important;
@@ -33,7 +44,7 @@ module.exports = (Request) => {
 		</style>
 		`;
 
-		var css2 = `
+			let css2 = `
 		<style type="text/css">
 			@-ms-viewport {
 				width: device-width;
@@ -153,31 +164,25 @@ module.exports = (Request) => {
 				}
 			}
 		</style>`;
-		var header = `${css} ${css2}`;
-		var productsStr = '';
-		var formProductsFields = '';
-		var rating = '';
+			let header = `${css} ${css2}`;
+			let productsStr = '';
+			let formProductsFields = '';
+			let rating = '';
 
-
-		for (var i = 0; i < info.products.length; i++) {
-			if (info.products[i].name) {
-				rating = `
-				<table style="border-collapse: collapse;border-spacing: 0;display: table;table-layout: fixed; margin: 0 auto; -webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;text-rendering: optimizeLegibility;background-color: #f5f5f5; width: 100%;">
+			for (let i = 0; i < info.products.length; i++) {
+				if (info.products[i].name) {
+					rating = `
+	<table style="border-collapse: collapse;border-spacing: 0;display: table;table-layout: fixed; margin: 0 auto; -webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;text-rendering: optimizeLegibility;background-color: #f5f5f5; width: 100%;">
         <tbody>
-            <tr>
-                <td style="padding: 0;vertical-align: top" class="">
-                    <div class="bottom-padding" style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
-                </td>
-            </tr>
             <tr>
                 <td style="padding: 0;vertical-align: top; width: 100%;" class="">
                     <center>
-                        <!--[if gte mso 11]>
- <center>
- <table><tr><td class="ms-sixhundred-table" width="600">
-<![endif]-->
+					<!--[if gte mso 11]>
+					 <center>
+					 <table><tr><td class="ms-sixhundred-table" width="600">
+					<![endif]-->
 
-                        <table class="main-content" style="width: 100%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;" width="600">
+                        <table class="main-content" style="background-color: #ffffff;" width="600">
                             <tbody>
                                 <tr>
                                     <td style="padding: 0;vertical-align: top;">
@@ -198,65 +203,64 @@ module.exports = (Request) => {
                                                                                 <div class="bottom-padding" style="margin-bottom: 0px; line-height: 7px; font-size: 7px;">&nbsp;</div>
                                                                                 <div style="width: 100%; text-align: center; float: left;">
                                                                                     <div class="rating" style="text-align: center; margin: 0; font-size: 50px; width: 275px; margin: 0 auto; margin-top: 10px;">
-
                                                                                         <table style="border-collapse: collapse;border-spacing: 0;width: 275px; margin: 0 auto; font-size: 50px; direction: rtl;" dir="rtl">
                                                                                             <tbody><tr>
                                                                                                 <td style="padding: 0;vertical-align: top;" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <div style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <a href="http://example.com/?rating=5" class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="1">
+                                                                                                    <label for="rating-${info.products[i].id}-5" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="1">
                                                                                                             <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
                                                                                                             <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </a>
-                                                                                                        <a href="http://example.com/?rating=5" class="star-number" target="_blank" lang="x-star-number" style="font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">5</a>
-                                                                                                    </div>
+                                                                                                        </div>
+                                                                                                        <input type="radio" id="rating-${info.products[i].id}-5" name="ratings[${info.products[i].id}]" value="5">
+                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">5</div>
+                                                                                                    </label>
                                                                                                 </td>
                                                                                                 <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <div style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <a href="http://example.com/?rating=4" class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="2">
+                                                                                                    <label for="rating-${info.products[i].id}-4" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="2">
                                                                                                             <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
                                                                                                             <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </a>
-                                                                                                        <a href="http://example.com/?rating=4" class="star-number" target="_blank" lang="x-star-number" style="font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">4</a>
-                                                                                                    </div>
+                                                                                                        </div>
+                                                                                                        <input type="radio" id="rating-${info.products[i].id}-4" name="ratings[${info.products[i].id}]" value="4">
+                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">4</div>
+                                                                                                    </label>
                                                                                                 </td>
                                                                                                 <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <div style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <a href="http://example.com/?rating=3" class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="3">
+                                                                                                    <label for="rating-${info.products[i].id}-3" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="3">
                                                                                                             <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
                                                                                                             <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </a>
-                                                                                                        <a href="http://example.com/?rating=3" class="star-number" target="_blank" lang="x-star-number" style="font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">3</a>
-                                                                                                    </div>
+                                                                                                        </div>
+                                                                                                        <input type="radio" id="rating-${info.products[i].id}-3" name="ratings[${info.products[i].id}]" value="3">
+                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">3</div>
+                                                                                                    </label>
                                                                                                 </td>
                                                                                                 <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <div style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <a href="http://example.com/?rating=2" class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="4">
+                                                                                                    <label for="rating-${info.products[i].id}-2" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="4">
                                                                                                             <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
                                                                                                             <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </a>
-                                                                                                        <a href="http://example.com/?rating=2" class="star-number" target="_blank" lang="x-star-number" style="font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">2</a>
-                                                                                                    </div>
+                                                                                                        </div>
+                                                                                                        <input type="radio" id="rating-${info.products[i].id}-2" name="ratings[${info.products[i].id}]" value="2">
+                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">2</div>
+                                                                                                    </label>
                                                                                                 </td>
                                                                                                 <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <div style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <a href="http://example.com/?rating=1" class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="5">
+                                                                                                    <label for="rating-${info.products[i].id}-1" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; cursor: pointer; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="5">
                                                                                                             <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
                                                                                                             <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </a>
-                                                                                                        <a href="http://example.com/?rating=1" class="star-number" target="_blank" lang="x-star-number" style="font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">1</a>
-                                                                                                    </div>
+                                                                                                        </div>
+                                                                                                        <input type="radio" id="rating-${info.products[i].id}-1" name="ratings[${info.products[i].id}]" value="1">
+                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">1</div>
+                                                                                                    </label>
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </tbody></table>
-
-
-
-
                                                                                     </div>
                                                                                 </div>
                                                                                 <div style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
                                                                             </div>
-
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -271,53 +275,59 @@ module.exports = (Request) => {
                             </tbody>
                         </table>
                         <!--[if gte mso 11]>
- </td></tr></table>
- </center>
-<![endif]-->
+						 </td></tr></table>
+						 </center>
+						<![endif]-->
                     </center>
                 </td>
             </tr>
         </tbody>
     </table>
 				`;
-				formProductsFields += `
+					formProductsFields += `
 					<div>
 						${rating}
 					</div>
 					<div>
-						<label for="title${i}">Antraštė</label>
+						<label for="title-${info.products[i].id}">Antraštė</label>
 						<input name="title-${info.products[i].id}" id="title-${info.products[i].id}" type="text">
 					</div>
 					<div>
 						<label for="comment-${info.products[i].id}">Komentaras</label>
 						<textarea name="comment-${info.products[i].id}" id="comment-${info.products[i].id}" cols="30" rows="10"></textarea>
-					</div>`;
-				productsStr += `${info.products[i].name}`;
-				if ((i + 1) < info.products.length && info.products.length > 1) {
-					productsStr = productsStr + ',';
+					</div>
+					<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 2em 1em 0 1em; padding: 0;">`;
+					productsStr += `${info.products[i].name}`;
+					if ((i + 1) < info.products.length && info.products.length > 1) {
+						productsStr = productsStr + ',';
+					}
 				}
 			}
-		}
-		var formStr = '<form action="//localhost:3000/api/feedbacks" method="post">' +
-			formProductsFields +
-			'' +
-			'</form>';
-		var body = `
+			var formStr = `<form action="http://localhost:3000/api/feedbacks/sendfeedback" method="post">
+			<input type="hidden" name="clientid" value="${info.client.id}">
+			<input type="hidden" name="customerid" value="${info.customer.id}">
+			${formProductsFields}
+			<input type="submit" value="Siūsti">
+			</form>`;
+			var body = `
 		<body class="main-wrapper" style="margin-top: 0;margin-bottom: 0;margin-left: 0;margin-right: 0;padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;min-width: 100%;background-color: #f5f5f5">
-			${emailContent}
-			${formStr}
+			<div style="width: 100%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;">
+				${emailContent}
+				${formStr}
+			</div>
+
 		</body>`;
-		var html = `
+			var html = `
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html>
 		${header}
 		${body}
 		</html>
 		`;
-		// console.log(html);
-		// next(null, {message: 'success!', code: 200});
-		mailer.sendEmail('kiesha192@gmail.com', Request.app.get('emailSendFrom'), 'labas', html, (err) => {
-			next(err, {message: 'success!', code: 200});
+			// console.log(html);
+			mailer.sendEmail('kiesha192@gmail.com', Request.app.get('emailSendFrom'), 'labas', html, (err) => {
+				next(err, {message: 'success!', code: 200});
+			});
 		});
 	};
 	Request.remoteMethod(
