@@ -172,130 +172,134 @@ module.exports = (Request) => {
 			for (let i = 0; i < info.products.length; i++) {
 				if (info.products[i].name) {
 					rating = `
-	<table style="border-collapse: collapse;border-spacing: 0;display: table;table-layout: fixed; margin: 0 auto; -webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;text-rendering: optimizeLegibility;background-color: #f5f5f5; width: 100%;">
-        <tbody>
-            <tr>
-                <td style="padding: 0;vertical-align: top; width: 100%;" class="">
-                    <center>
-					<!--[if gte mso 11]>
-					 <center>
-					 <table><tr><td class="ms-sixhundred-table" width="600">
-					<![endif]-->
-
-                        <table class="main-content" style="background-color: #ffffff;" width="600">
-                            <tbody>
-                                <tr>
-                                    <td style="padding: 0;vertical-align: top;">
-                                        <table class="main-content" style="border-collapse: collapse;border-spacing: 0;margin-left: auto;margin-right: auto;width: 100%; max-width: 600px;">
-                                            <tbody>
-                                                <tr>
-                                                    <td style="padding: 0;vertical-align: top;text-align: left">
-                                                        <table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%;">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="content-padding" style="padding: 0;vertical-align: top">
-                                                                        <div style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
-                                                                        <div class="body-copy" style="margin: 0;">
-
-                                                                            <div style="margin: 0;color: #60666d;font-size: 50px;font-family: sans-serif;line-height: 20px; text-align: left;">
-                                                                                <div class="bottom-padding" style="margin-bottom: 0px; line-height: 15px; font-size: 15px;">&nbsp;</div>
-                                                                                <div style="text-align: center; margin: 0; font-size: 10px;  text-transform: uppercase; letter-spacing: .5px;">Rating (select a star amount):</div>
-                                                                                <div class="bottom-padding" style="margin-bottom: 0px; line-height: 7px; font-size: 7px;">&nbsp;</div>
-                                                                                <div style="width: 100%; text-align: center; float: left;">
-                                                                                    <div class="rating" style="text-align: center; margin: 0; font-size: 50px; width: 275px; margin: 0 auto; margin-top: 10px;">
-                                                                                        <table style="border-collapse: collapse;border-spacing: 0;width: 275px; margin: 0 auto; font-size: 50px; direction: rtl;" dir="rtl">
-                                                                                            <tbody><tr>
-                                                                                                <td style="padding: 0;vertical-align: top;" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <label for="rating-${info.products[i].id}-5" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="1">
-                                                                                                            <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
-                                                                                                            <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </div>
-                                                                                                        <input type="radio" id="rating-${info.products[i].id}-5" name="ratings[${info.products[i].id}]" value="5">
-                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">5</div>
-                                                                                                    </label>
-                                                                                                </td>
-                                                                                                <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <label for="rating-${info.products[i].id}-4" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="2">
-                                                                                                            <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
-                                                                                                            <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </div>
-                                                                                                        <input type="radio" id="rating-${info.products[i].id}-4" name="ratings[${info.products[i].id}]" value="4">
-                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">4</div>
-                                                                                                    </label>
-                                                                                                </td>
-                                                                                                <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <label for="rating-${info.products[i].id}-3" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="3">
-                                                                                                            <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
-                                                                                                            <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </div>
-                                                                                                        <input type="radio" id="rating-${info.products[i].id}-3" name="ratings[${info.products[i].id}]" value="3">
-                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">3</div>
-                                                                                                    </label>
-                                                                                                </td>
-                                                                                                <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <label for="rating-${info.products[i].id}-2" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="4">
-                                                                                                            <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
-                                                                                                            <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </div>
-                                                                                                        <input type="radio" id="rating-${info.products[i].id}-2" name="ratings[${info.products[i].id}]" value="2">
-                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">2</div>
-                                                                                                    </label>
-                                                                                                </td>
-                                                                                                <td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
-                                                                                                    <label for="rating-${info.products[i].id}-1" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
-                                                                                                        <div class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; cursor: pointer; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="5">
-                                                                                                            <div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
-                                                                                                            <div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
-                                                                                                        </div>
-                                                                                                        <input type="radio" id="rating-${info.products[i].id}-1" name="ratings[${info.products[i].id}]" value="1">
-                                                                                                        <div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">1</div>
-                                                                                                    </label>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        </tbody></table>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!--[if gte mso 11]>
-						 </td></tr></table>
-						 </center>
-						<![endif]-->
-                    </center>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-				`;
+					<table style="border-collapse: collapse;border-spacing: 0;display: table;table-layout: fixed; margin: 0 auto; -webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;text-rendering: optimizeLegibility;background-color: #f5f5f5; width: 100%;">
+						<tbody>
+							<tr>
+								<td style="padding: 0;vertical-align: top; width: 100%;" class="">
+									<center>
+									<!--[if gte mso 11]>
+									 <center>
+									 <table><tr><td class="ms-sixhundred-table" width="600">
+									<![endif]-->
+				
+										<table class="main-content" style="background-color: #ffffff;" width="600">
+											<tbody>
+												<tr>
+													<td style="padding: 0;vertical-align: top;">
+														<table class="main-content" style="border-collapse: collapse;border-spacing: 0;margin-left: auto;margin-right: auto;width: 100%; max-width: 600px;">
+															<tbody>
+																<tr>
+																	<td style="padding: 0;vertical-align: top;text-align: left">
+																		<table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%;">
+																			<tbody>
+																				<tr>
+																					<td class="content-padding" style="padding: 0;vertical-align: top">
+																						<div style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
+																						<div class="body-copy" style="margin: 0;">
+				
+																							<div style="margin: 0;color: #60666d;font-size: 50px;font-family: sans-serif;line-height: 20px; text-align: left;">
+																								<div class="bottom-padding" style="margin-bottom: 0px; line-height: 15px; font-size: 15px;">&nbsp;</div>
+																								<div style="text-align: center; margin: 0; font-size: 10px;  text-transform: uppercase; letter-spacing: .5px;">Įvertinkite šį produktą: ${info.products[i].name}</div>
+																								<div class="bottom-padding" style="margin-bottom: 0px; line-height: 7px; font-size: 7px;">&nbsp;</div>
+																								<div class="bottom-padding" style="margin-bottom: 0px; line-height: 7px; font-size: 7px; text-align: center;"><img width="200" src="${info.products[i].photourl}"></div>
+																								<div style="width: 100%; text-align: center; float: left;">
+																									<div class="rating" style="text-align: center; margin: 0; font-size: 50px; width: 275px; margin: 0 auto; margin-top: 10px;">
+																										<table style="border-collapse: collapse;border-spacing: 0;width: 275px; margin: 0 auto; font-size: 50px; direction: rtl;" dir="rtl">
+																											<tbody><tr>
+																												<td style="padding: 0;vertical-align: top;" width="55" class="star-wrapper" lang="x-star-wrapper">
+																													<label for="rating-${info.products[i].id}-5" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+																														<div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="1">
+																															<div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
+																															<div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
+																														</div>
+																														<input type="radio" id="rating-${info.products[i].id}-5" name="feedbacks[${info.products[i].id}][totalratingscore]" value="5">
+																														<div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">5</div>
+																													</label>
+																												</td>
+																												<td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
+																													<label for="rating-${info.products[i].id}-4" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+																														<div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="2">
+																															<div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
+																															<div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
+																														</div>
+																														<input type="radio" id="rating-${info.products[i].id}-4" name="feedbacks[${info.products[i].id}][totalratingscore]" value="4">
+																														<div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">4</div>
+																													</label>
+																												</td>
+																												<td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
+																													<label for="rating-${info.products[i].id}-3" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+																														<div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="3">
+																															<div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
+																															<div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
+																														</div>
+																														<input type="radio" id="rating-${info.products[i].id}-3" name="feedbacks[${info.products[i].id}][totalratingscore]" value="3">
+																														<div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">3</div>
+																													</label>
+																												</td>
+																												<td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
+																													<label for="rating-${info.products[i].id}-2" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+																														<div class="star" target="_blank" lang="x-star-divbox" style="cursor: pointer; color: #FFCC00; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="4">
+																															<div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
+																															<div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
+																														</div>
+																														<input type="radio" id="rating-${info.products[i].id}-2" name="feedbacks[${info.products[i].id}][totalratingscore]" value="2">
+																														<div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">2</div>
+																													</label>
+																												</td>
+																												<td style="padding: 0;vertical-align: top" width="55" class="star-wrapper" lang="x-star-wrapper">
+																													<label for="rating-${info.products[i].id}-1" style="display: block; text-align: center; float: left;width: 55px;overflow: hidden;line-height: 60px;">
+																														<div class="star" target="_blank" lang="x-star-divbox" style="color: #FFCC00; cursor: pointer; text-decoration: none; display: inline-block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;" tabindex="5">
+																															<div lang="x-empty-star" style="margin: 0;display: inline-block;">☆</div>
+																															<div lang="x-full-star" style="margin: 0;display: inline-block; width:0; overflow:hidden;float:left; display:none; height: 0; max-height: 0;">★</div>
+																														</div>
+																														<input type="radio" id="rating-${info.products[i].id}-1" name="feedbacks[${info.products[i].id}][totalratingscore]" value="1">
+																														<div class="star-number" target="_blank" lang="x-star-number" style="cursor: pointer; font-family: sans-serif;color: #AEAEAE; font-size: 14px; line-height: 14px; text-decoration: none; display: block;height: 50px;width: 55px;overflow: hidden;line-height: 60px;border-bottom: 3px solid #FFFFFF; text-align: center;">1</div>
+																													</label>
+																												</td>
+																											</tr>
+																										</tbody></table>
+																									</div>
+																								</div>
+																								<div style="margin-bottom: 0px; line-height: 30px; font-size: 30px;">&nbsp;</div>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<!--[if gte mso 11]>
+										 </td></tr></table>
+										 </center>
+										<![endif]-->
+									</center>
+								</td>
+							</tr>
+						</tbody>
+					</table>`;
 					formProductsFields += `
 					<div>
 						${rating}
 					</div>
-					<div>
-						<label for="title-${info.products[i].id}">Antraštė</label>
-						<input name="title-${info.products[i].id}" id="title-${info.products[i].id}" type="text">
+					<div style="padding: 0px 20px 30px 20px;">
+						<label style="color: #989898; width: 15%; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė</label>
+						<input style="float: right; border: 2px solid #94ec8e;padding: 5px 10px;line-height: 30px;border-radius: 15px;width: 400px;" name="feedbacks[${info.products[i].id}][commentheader]" id="title-${info.products[i].id}" type="text">
 					</div>
-					<div>
-						<label for="comment-${info.products[i].id}">Komentaras</label>
-						<textarea name="comment-${info.products[i].id}" id="comment-${info.products[i].id}" cols="30" rows="10"></textarea>
+					<div style="padding: 0px 20px 30px 20px;">
+						<label style="color: #989898; width: 15%; display: inline-block;" for="comment-${info.products[i].id}">Komentaras</label>
+						<textarea style="float: right; border: 2px solid #94ec8e;padding: 5px 10px;line-height: 30px;border-radius: 15px;width: 400px; resize: none !important;" name="feedbacks[${info.products[i].id}][commentcontent]" id="comment-${info.products[i].id}" rows="5"></textarea>
 					</div>
+					<div style="clear: both;"></div>
+					<input type="hidden" name="feedbacks[${info.products[i].id}][clientid]" value="${info.client.id}">
+					<input type="hidden" name="feedbacks[${info.products[i].id}][customerid]" value="${info.customer.id}">
+					<input type="hidden" name="feedbacks[${info.products[i].id}][productid]" value="${info.products[i].id}">
 					<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 2em 1em 0 1em; padding: 0;">`;
 					productsStr += `${info.products[i].name}`;
 					if ((i + 1) < info.products.length && info.products.length > 1) {
@@ -304,14 +308,16 @@ module.exports = (Request) => {
 				}
 			}
 			var formStr = `<form action="http://localhost:3000/api/feedbacks/sendfeedback" method="post">
-			<input type="hidden" name="clientid" value="${info.client.id}">
-			<input type="hidden" name="customerid" value="${info.customer.id}">
+			
 			${formProductsFields}
-			<input type="submit" value="Siūsti">
+			<div style="padding: 25px; text-align: center;">
+				<input style="border: none;padding: 15px 30px; border-radius: 10px; background-color: #7de463; color: white; font-size: 16px; font-weight: 500; letter-spacing: 1.8px;" type="submit" value="Siūsti">
+			</div>
+			
 			</form>`;
 			var body = `
-		<body class="main-wrapper" style="margin-top: 0;margin-bottom: 0;margin-left: 0;margin-right: 0;padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;min-width: 100%;background-color: #f5f5f5">
-			<div style="width: 100%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;">
+		<body class="main-wrapper" style="margin-top: 0;margin-bottom: 0;margin-left: 0;margin-right: 0;padding-top: 30px;padding-bottom: 0;padding-left: 0;padding-right: 0;min-width: 100%;background-color: #f5f5f5">
+			<div style="padding: 25px; width: 100%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;">
 				${emailContent}
 				${formStr}
 			</div>
