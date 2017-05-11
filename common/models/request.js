@@ -297,8 +297,6 @@ module.exports = (Request) => {
 						<textarea style="float: right; border: 2px solid #94ec8e;padding: 5px 10px;line-height: 30px;border-radius: 15px;width: 400px; resize: none !important;" name="feedbacks[${info.products[i].id}][commentcontent]" id="comment-${info.products[i].id}" rows="5"></textarea>
 					</div>
 					<div style="clear: both;"></div>
-					<input type="hidden" name="feedbacks[${info.products[i].id}][clientid]" value="${info.client.id}">
-					<input type="hidden" name="feedbacks[${info.products[i].id}][customerid]" value="${info.customer.id}">
 					<input type="hidden" name="feedbacks[${info.products[i].id}][productid]" value="${info.products[i].id}">
 					<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 2em 1em 0 1em; padding: 0;">`;
 					productsStr += `${info.products[i].name}`;
@@ -308,7 +306,8 @@ module.exports = (Request) => {
 				}
 			}
 			var formStr = `<form action="http://localhost:3000/api/feedbacks/sendfeedback" method="post">
-			
+			<input type="hidden" name="clientid" value="${info.client.id}">
+			<input type="hidden" name="customerid" value="${info.customer.id}">
 			${formProductsFields}
 			<div style="padding: 25px; text-align: center;">
 				<input style="border: none;padding: 15px 30px; border-radius: 10px; background-color: #7de463; color: white; font-size: 16px; font-weight: 500; letter-spacing: 1.8px;" type="submit" value="Siūsti">
