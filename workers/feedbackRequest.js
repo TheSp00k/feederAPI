@@ -43,10 +43,10 @@ worker.addFunction('feedbackRequest', (job) => {
 			return job.reportError('failed');
 		}
 
-		
+
 		var emailHtml = 'Hi,<br><br>' +
 			'Your request for exporting clients has been processed.<br>' +
-			'You can download clients in ' + type + ' format from <a href="' + url + '">here</a>';
+			'You can download clients in tuu format from';
 		var subject = 'Your request for exporting clients has been processed';
 		mailer.sendEmail(currentUser.email, app.get('emailSendFrom'), subject, emailHtml, (err, success) => {
 			if (err)

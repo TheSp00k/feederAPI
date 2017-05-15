@@ -24,6 +24,9 @@
     "approved": {
       "type": "boolean"
     },
+    "purchased": {
+      "type": "boolean"
+    },
     "rejected": {
       "type": "boolean"
     },

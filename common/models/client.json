@@ -26,6 +26,9 @@
     },
     "sendrequests": {
       "type": "boolean"
+    },
+    "logourl": {
+      "type": "string"
     }
   },
   "validations": [],

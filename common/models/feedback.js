@@ -1,6 +1,5 @@
 'use strict';
 var async = require('async');
-
 module.exports = (Feedback) => {
 	Feedback.sendFeedback = function (data, next) {
 		Feedback.app.models.client.findById(data.clientid, (err, clientInstance) => {
@@ -16,6 +15,7 @@ module.exports = (Feedback) => {
 			async.each(data.feedbacks, (feedback, nextFeedback) => {
 				feedback.clientid = data.clientid;
 				feedback.customerid = data.customerid;
+				feedback.purchased = true;
 				Feedback.upsert(feedback, (err, feedbackInstance) => {
 					if (err) {
 						return nextFeedback(err);
