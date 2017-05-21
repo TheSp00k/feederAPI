@@ -13,10 +13,6 @@ module.exports = function (app) {
 					var hours = moment(clientListInstance[i].requesttime).format('H');
 					var minutes = moment(clientListInstance[i].requesttime).format('m');
 				}
-
-
-
-
 				var rule = { hour: parseInt(hours), minute: parseInt(minutes) };
 				// rule = '* * * * * *';
 				schedule.scheduleJob(rule, () => {

@@ -1,0 +1,2 @@
+ALTER TABLE `AccessToken` 
+ADD COLUMN `scopes` VARCHAR(512) NULL AFTER `userId`;
