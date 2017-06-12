@@ -23,6 +23,12 @@
     },
     "photourl": {
       "type": "string"
+    },
+    "sendrequests": {
+      "type": "boolean"
+    },
+    "showfeedbacks": {
+      "type": "boolean"
     }
   },
   "validations": [],
