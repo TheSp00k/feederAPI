@@ -1,7 +1,39 @@
 'use strict';
 var async = require('async');
 module.exports = (Feedback) => {
-	Feedback.sendFeedback = function (data, next) {
+
+	Feedback.afterRemote('sendFeedback', (context, instance, next) => {
+		var res = context.res; //this is the same response object you get in Express
+		console.log(instance);
+		res.send('hello world');
+	});
+
+	Feedback.beforeRemote('sendFeedback', (context, next) => {
+		console.log(context.req.body);
+		Feedback.app.models.request.findById(context.req.body.requestid, (err, requestInstance) => {
+			if (err) {
+				return next(err);
+			}
+			if (!requestInstance) {
+				err = new Error();
+				err.code = 500;
+				err.message = 'Something went wrong.';
+			}
+
+			if (requestInstance.status === 'sent') {
+				err = new Error();
+				err.code = 404;
+				err.message = 'You have already left a feedback.';
+			}
+
+			if (err) {
+				// return next(err);
+				context.res.send('<h1>not working</h1>');
+			}
+		});
+	});
+
+	Feedback.sendFeedback = (data, next) => {
 		Feedback.app.models.client.findById(data.clientid, (err, clientInstance) => {
 			if (err) {
 				return next(err);
@@ -23,7 +55,32 @@ module.exports = (Feedback) => {
 					nextFeedback();
 				})
 			}, (err) => {
-				next(err, {code: 200, message: 'success'});
+				Feedback.app.models.request.findById(data.requestid, (err, requestInstance) => {
+					if (err) {
+						return next(err);
+					}
+					if (!requestInstance) {
+						err = new Error();
+						err.code = 500;
+						err.message = 'Something went wrong.';
+					}
+
+					if (requestInstance.status === 'sent') {
+						err = new Error();
+						err.code = 404;
+						err.message = 'You have already left a feedback.';
+					}
+
+					if (err) {
+						return next(err);
+					}
+
+					requestInstance.status = 'sent';
+
+					Feedback.app.models.request.upsert(requestInstance, (err, upsertRequest) => {
+						next(err, {code: 200, message: 'success'});
+					});
+				});
 			});
 		});
 	};

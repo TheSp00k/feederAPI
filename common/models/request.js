@@ -81,6 +81,7 @@ module.exports = (Request) => {
 			var formStr = `
 			<form action="http://localhost:3000/api/feedbacks/sendfeedback" method="post">
 				<input type="hidden" name="clientid" value="${info.client.id}">
+				<input type="hidden" name="requestid" value="${info.requestid}">
 				<input type="hidden" name="customerid" value="${info.customer.id}">
 				<table style="text-align: center; width: 95%">
 					<tr class="logo"><td colspan="5"><img width="200" src="${clientInstance.logourl}"></td></tr>	

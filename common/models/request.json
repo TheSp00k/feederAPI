@@ -30,6 +30,11 @@
       "model": "customer",
       "foreignKey": "customerid"
     },
+    "client": {
+      "type": "belongsTo",
+      "model": "client",
+      "foreignKey": "clientid"
+    },
     "products": {
       "type": "hasMany",
       "model": "product",
