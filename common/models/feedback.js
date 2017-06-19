@@ -24,9 +24,7 @@ module.exports = (Feedback) => {
 				err = new Error();
 				err.code = 500;
 				err.message = 'Something went wrong.';
-			}
-
-			if (requestInstance.status === 'sent') {
+			}else if (requestInstance.status === 'sent') {
 				err = new Error();
 				err.code = 404;
 				err.message = 'You have already left a feedback.';
