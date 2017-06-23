@@ -1,0 +1,11 @@
+{
+  "api": {
+    "name": "api",
+    "connector": "mysql",
+    "host": "feedbackdb.cojuelgk309w.eu-west-1.rds.amazonaws.com:3306",
+    "port": 3306,
+    "database": "api",
+    "password": "root",
+    "user": "root"
+  }
+}
