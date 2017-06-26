@@ -22,7 +22,7 @@ module.exports = (Product) => {
 				}
 			}
 			var totalProductScore = totalStars / totalFeedbackCount;
-			next(err, Math.round( totalProductScore * 10 ) / 10);
+			next(err, Math.round(totalProductScore * 10) / 10);
 		})
 	};
 
@@ -31,13 +31,20 @@ module.exports = (Product) => {
 		var response = [];
 		data = data.constructor === Array ? data : [data];    // convert single object to array
 		async.each(data, (item, cb) => {
-			Product.upsert(item, (upsertError, upsertInstance) => {
-				if (upsertError) {
-					cb(upsertError);
-				} else {
-					response.push(upsertInstance);
-					cb();
+			Product.findOne({where: {and: [{clientid: item.clientid}, {productnumber: item.productnumber}]}}, (err, productInstance) => {
+				if (productInstance) {
+					delete item.clientid;
+					delete item.productnumber;
+					item.id = productInstance.id;
 				}
+				Product.upsert(item, (upsertError, upsertInstance) => {
+					if (upsertError) {
+						cb(upsertError);
+					} else {
+						response.push(upsertInstance);
+						cb();
+					}
+				});
 			});
 		}, (err) => {
 			callback(err, response);
@@ -47,19 +54,19 @@ module.exports = (Product) => {
 		'import',
 		{
 			description: 'Creates or updates a product or a list of products',
-			http: { path: '/import', verb: 'put' },
-			accepts: { arg: 'data', type: 'object', http: { source: 'body' }, description: 'An object or array of objects' },
-			returns: { arg: 'data', type: 'any', root: true }
+			http: {path: '/import', verb: 'put'},
+			accepts: {arg: 'data', type: 'any', http: {source: 'body'}, description: 'An object or array of objects'},
+			returns: {arg: 'data', type: 'any', root: true}
 		}
 	);
 	Product.remoteMethod(
 		'totalRatingScore',
 		{
-			http: { path: '/totalratingscore', verb: 'get' },
+			http: {path: '/totalratingscore', verb: 'get'},
 			accepts: [
-				{ arg: 'productid', type: 'number' }
+				{arg: 'productid', type: 'number'}
 			],
-			returns: { arg: 'totalscore', root: true, type: 'number' }
+			returns: {arg: 'totalscore', root: true, type: 'number'}
 		}
 	);
 };

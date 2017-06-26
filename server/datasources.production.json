@@ -5,26 +5,7 @@
     "host": "feedbackdb.cojuelgk309w.eu-west-1.rds.amazonaws.com",
     "port": 3306,
     "database": "api",
-    "password": "feedbackAdmin",
-    "user": "feedbackAdmin"
-  },
-  "myEmailDataSource": {
-    "name": "myEmailDataSource",
-    "connector": "mail",
-    "transports": [
-      {
-        "type": "smtp",
-        "host": "email-smtp.us-west-2.amazonaws.com",
-        "secure": true,
-        "port": 465,
-        "tls": {
-          "rejectUnauthorized": false
-        },
-        "auth": {
-          "user": "AKIAJVBH24XNZHYEJNQQ",
-          "pass": "AtnIp826n+ng1JmFMnfvrO54wHLMSXxvYIPE3NlGPGWo"
-        }
-      }
-    ]
+    "password": "root",
+    "user": "root"
   }
 }

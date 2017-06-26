@@ -4,8 +4,14 @@ module.exports = (Feedback) => {
 
 	Feedback.afterRemote('sendFeedback', (context, instance, next) => {
 		var res = context.res; //this is the same response object you get in Express
-		console.log(instance);
-		res.send('hello world');
+		let message = `<div style="width: 500px;
+			margin: 20% auto;
+			text-align: center;
+			padding: 20px;
+			background-color: #dff0d8;
+			border-radius: 10px;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">Thank you for leaving a feedback</div>`;
+		res.send(message);
 	});
 
 	Feedback.beforeRemote('sendFeedback', (context, next) => {
@@ -18,17 +24,21 @@ module.exports = (Feedback) => {
 				err = new Error();
 				err.code = 500;
 				err.message = 'Something went wrong.';
-			}
-
-			if (requestInstance.status === 'sent') {
+			}else if (requestInstance.status === 'sent') {
 				err = new Error();
 				err.code = 404;
 				err.message = 'You have already left a feedback.';
 			}
 
 			if (err) {
-				// return next(err);
-				context.res.send('<h1>not working</h1>');
+				let error = `<div style="width: 500px;
+					margin: 20% auto;
+					text-align: center;
+					padding: 20px;
+					background-color: #f2dede;
+					border-radius: 10px;
+					font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">${err.message}</div>`;
+				context.res.send(error);
 			}
 		});
 	});
@@ -63,16 +73,6 @@ module.exports = (Feedback) => {
 						err = new Error();
 						err.code = 500;
 						err.message = 'Something went wrong.';
-					}
-
-					if (requestInstance.status === 'sent') {
-						err = new Error();
-						err.code = 404;
-						err.message = 'You have already left a feedback.';
-					}
-
-					if (err) {
-						return next(err);
 					}
 
 					requestInstance.status = 'sent';

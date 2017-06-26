@@ -90,6 +90,9 @@ module.exports = (Request) => {
 					<tr>
 						<td colspan="5"><input style="border: none;padding: 15px 30px; background-color: #fa7e28; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Pateikti komentarą"></td>
 					</tr>
+					<tr>
+						<td colspan="5">Jei nematote formos spauskite <a href="http://localhost:4200/request?requestid=${info.requestid}">čia</a></td>
+					</tr>
 				</table>
 			</form>`;
 			var body = `
