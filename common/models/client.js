@@ -12,14 +12,10 @@ module.exports = (Client) => {
 		return uuid;
 	};
 	Client.beforeRemote('create', (ctx, unused, next) => {
-		console.log(ctx.req.body);
-
 		ctx.req.body.appid = Client.generateId();
 		next();
 	});
 	Client.authAppId = (appid, domain, next) => {
-		console.log(appid, domain);
-		
 		Client.findOne({where: {and: [{appid: appid}, {domain: domain}]}}, (err, clientInstance) => {
 			if (err) {
 				return next(err);
