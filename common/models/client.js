@@ -31,7 +31,15 @@ module.exports = (Client) => {
 				error.message = 'App id is invalid';
 				return next(error);
 			}
-			next(null, clientInstance);
+			Client.app.models.appuser.login({email: clientInstance.email, password: appid, ttl: 900000}, (err, authInfo) => {
+				if (err) {
+					return next(err);
+				}
+				if (authInfo.id) {
+					clientInstance.token = authInfo.id;
+				}
+				next(null, clientInstance);
+			});
 		});
 	};
 	Client.remoteMethod(
