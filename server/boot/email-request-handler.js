@@ -6,7 +6,7 @@ var gearmanode = require('gearmanode');
 var Report = require('../lib/report');
 
 module.exports = function (app) {
-	app.models.client.find({ where: { sendrequests: 1 } }, (err, clientListInstance) => {
+	app.models.client.find({ where: { sendrequests: 1 }, restriction: 'none'}, (err, clientListInstance) => {
 		if (clientListInstance.length > 0) {
 			for (let i = 0; i < clientListInstance.length; i++) {
 				if (clientListInstance[i].requesttime) {
