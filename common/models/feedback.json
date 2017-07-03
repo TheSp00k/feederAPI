@@ -68,6 +68,13 @@
       "permission": "DENY"
     },
     {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "feedbackAdmin",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",

@@ -10,14 +10,14 @@ var jobsDoneCount = 0;
 var restartAfterJobs = 10;
 
 worker.addFunction('feedbackRequest', (job) => {
-	console.log(job.payload.toString());
+	// console.log(job.payload.toString());
 
 	//data.report
 	//data.clientid
 	//data.requestdelay
 
 	var data = JSON.parse(job.payload.toString());
-
+// console.log(data);
 	Report.working(app, data.report);
 	var Request = app.models.request;
 
@@ -37,12 +37,36 @@ worker.addFunction('feedbackRequest', (job) => {
 			]
 		}
 	};
-	Request.find(requestQuery, (err, requestInstance) => {
+	Request.findOne(requestQuery, (err, requestInstance) => {
 		if (err) {
 			Report.failed(app, data.report, err);
 			return job.reportError('failed');
 		}
-
+		if (!requestInstance) {
+			let error = new Error();
+			error.code = 404;
+			error.statusCode = 404;
+			error.message = 'There are no products and client';
+			Report.failed(app, data.report, error);
+			return job.reportError('failed');
+		}
+		if (!requestInstance.products || requestInstance.products.length == 0) {
+			let error = new Error();
+			error.code = 404;
+			error.statusCode = 404;
+			error.message = 'There are no products';
+			Report.failed(app, data.report, error);
+			return job.reportError('failed');
+		}
+		if(!requestInstance.customer) {
+			let error = new Error();
+			error.code = 404;
+			error.statusCode = 404;
+			error.message = 'There is no customer';
+			Report.failed(app, data.report, error);
+			return job.reportError('failed');
+		}
+		console.log(requestInstance);
 		var products = requestInstance.products;
 		var customer = requestInstance.customer;
 		for (var p = 0; p < products.length; p++) {

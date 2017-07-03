@@ -15,7 +15,7 @@ module.exports = function (app) {
 				}
 				var rule = { hour: parseInt(hours), minute: parseInt(minutes) };
 				// rule = '* * * * * *';
-				schedule.scheduleJob(rule, () => {
+				schedule.scheduleJob('sendrequest' + clientListInstance[i].id, rule, () => {
 					console.log('clientid: ' + clientListInstance[i].id + ' (' + clientListInstance[i].name + ') on ' + clientListInstance[i].requesttime + ' minute');
 					Report.create(app, 'send-requests-client-' + clientListInstance[i].id, (err, report) => {
 						if (err) {

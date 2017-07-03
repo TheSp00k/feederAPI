@@ -15,6 +15,9 @@
     "clientid": {
       "type": "string"
     },
+    "feedbackadmin": {
+      "type": "boolean"
+    },
     "username": false,
     "realm": false,
     "credentials": false,
