@@ -14,7 +14,7 @@ module.exports = (Feedback) => {
 		res.send(message);
 	});
 
-	Feedback.beforeRemote('sendFeedback', (context, next) => {
+	Feedback.beforeRemote('sendFeedback', (context, unused, next) => {
 		console.log(context.req.body);
 		Feedback.app.models.request.findById(context.req.body.requestid, (err, requestInstance) => {
 			if (err) {
@@ -24,7 +24,7 @@ module.exports = (Feedback) => {
 				err = new Error();
 				err.code = 500;
 				err.message = 'Something went wrong.';
-			}else if (requestInstance.status === 'sent') {
+			}else if (requestInstance.status === 'replied') {
 				err = new Error();
 				err.code = 404;
 				err.message = 'You have already left a feedback.';
@@ -39,11 +39,14 @@ module.exports = (Feedback) => {
 					border-radius: 10px;
 					font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">${err.message}</div>`;
 				context.res.send(error);
+			} else {
+				next();
 			}
 		});
 	});
 
 	Feedback.sendFeedback = (data, next) => {
+		console.log('asdasdsa');
 		Feedback.app.models.client.findById(data.clientid, (err, clientInstance) => {
 			if (err) {
 				return next(err);
@@ -65,6 +68,7 @@ module.exports = (Feedback) => {
 					nextFeedback();
 				})
 			}, (err) => {
+				console.log(err);
 				Feedback.app.models.request.findById(data.requestid, (err, requestInstance) => {
 					if (err) {
 						return next(err);
@@ -75,7 +79,7 @@ module.exports = (Feedback) => {
 						err.message = 'Something went wrong.';
 					}
 
-					requestInstance.status = 'sent';
+					requestInstance.status = 'replied';
 
 					Feedback.app.models.request.upsert(requestInstance, (err, upsertRequest) => {
 						next(err, {code: 200, message: 'success'});

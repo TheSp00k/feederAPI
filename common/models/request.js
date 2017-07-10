@@ -2,7 +2,8 @@
 
 module.exports = (Request) => {
 	Request.sendFeedbackRequest = (info, next) => {
-
+		const apiUrl = Request.app.get('apiUrl');
+		const adminUrl = Request.app.get('adminUrl');
 		Request.app.models.client.findById(info.client.id, (err, clientInstance) => {
 			if (err) {
 				return next(err);
@@ -81,7 +82,7 @@ module.exports = (Request) => {
 				}
 			}
 			var formStr = `
-			<form action="http://localhost:3000/feedbacks/sendfeedback" method="post">
+			<form action="${apiUrl}/feedbacks/sendfeedback" method="post">
 				<input type="hidden" name="clientid" value="${info.client.id}">
 				<input type="hidden" name="requestid" value="${info.requestid}">
 				<input type="hidden" name="customerid" value="${info.customer.id}">
@@ -93,7 +94,7 @@ module.exports = (Request) => {
 						<td colspan="5"><input style="border: none;padding: 15px 30px; background-color: #fa7e28; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Pateikti komentarą"></td>
 					</tr>
 					<tr>
-						<td colspan="5">Jei nematote formos spauskite <a href="http://localhost:4200/request?requestid=${info.requestid}">čia</a></td>
+						<td colspan="5">Jei nematote formos spauskite <a href="${adminUrl}/request?requestid=${info.requestid}">čia</a></td>
 					</tr>
 				</table>
 			</form>`;

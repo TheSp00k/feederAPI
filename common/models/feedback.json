@@ -75,6 +75,13 @@
       "property": "*"
     },
     {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "sendFeedback"
+    },
+    {
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",

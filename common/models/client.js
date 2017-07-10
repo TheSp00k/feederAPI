@@ -70,6 +70,13 @@ module.exports = (Client) => {
 				if (err) {
 					return next(err);
 				}
+				if (!clientInstance) {
+					let error = new Error();
+					error.code = 404;
+					error.statusCode = 404;
+					error.message = 'No client found';
+					return next(error);
+				}
 				ctx.instance.appid = clientInstance.appid;
 				next();
 			})
