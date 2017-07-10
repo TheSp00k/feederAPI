@@ -1,0 +1,5 @@
+{
+  "restApiRoot": "/",
+  "apiUrl": "//52.211.101.202:3001",
+  "adminUrl": "//feedliteadmin.com.s3-website-eu-west-1.amazonaws.com"
+}
