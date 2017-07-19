@@ -178,16 +178,13 @@ module.exports = (Client) => {
 			}
 			Client.app.models.appuser.login({
 				email: clientInstance.email,
-				password: appid,
-				ttl: 900000
+				password: appid
 			}, (err, authInfo) => {
 				if (err) {
 					return next(err);
 				}
-				if (authInfo.id) {
-					clientInstance.token = authInfo.id;
-				}
-				next(null, clientInstance);
+				authInfo.clientid = clientInstance.id;
+				next(null, authInfo);
 			});
 		});
 	};
