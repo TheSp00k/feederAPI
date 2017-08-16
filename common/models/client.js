@@ -161,7 +161,7 @@ module.exports = (Client) => {
 		});
 	});
 
-	Client.authAppId = (appid, domain, next) => {
+	Client.authAppId = (appid, domain, accessToken, next) => {
 		Client.findOne({
 			where: {and: [{appid: appid}, {domain: domain}]},
 			restriction: 'none'
