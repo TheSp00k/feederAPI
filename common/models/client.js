@@ -161,7 +161,7 @@ module.exports = (Client) => {
 		});
 	});
 
-	Client.authAppId = (appid, domain, accessToken, next) => {
+	Client.authAppId = (appid, domain, accesstoken, next) => {
 		Client.findOne({
 			where: {and: [{appid: appid}, {domain: domain}]},
 			restriction: 'none'
@@ -176,16 +176,49 @@ module.exports = (Client) => {
 				error.message = 'App id is invalid';
 				return next(error);
 			}
-			Client.app.models.appuser.login({
-				email: clientInstance.email,
-				password: appid
-			}, (err, authInfo) => {
-				if (err) {
-					return next(err);
-				}
-				authInfo.clientid = clientInstance.id;
-				next(null, authInfo);
-			});
+			if (accesstoken) {
+				Client.app.models.AccessToken.findById(accesstoken, (err, accessTokenInstance) => {
+					if (err) {
+						return next(err);
+					}
+					if (!accessTokenInstance) {
+						newAuth(clientInstance, appid, (err, authInfo) => {
+							return next(err, authInfo);
+						});
+					} else {
+						const now = new Date();
+						if (now.getTime() - accessTokenInstance.created.getTime() < accessTokenInstance.ttl) {
+							accessTokenInstance.clientid = clientInstance.id;
+							return next(null, accessTokenInstance);
+						} else {
+							accessTokenInstance.created = now;
+							Client.app.models.AccessToken.upsert(accessTokenInstance, (err, accessTokenUpdated) => {
+								if (err) {
+									return next(err);
+								}
+								accessTokenUpdated.clientid = clientInstance.id;
+								return next(null, accessTokenUpdated);
+							});
+						}
+					}
+				});
+			} else {
+				newAuth(clientInstance, appid, (err, authInfo) => {
+					return next(err, authInfo);
+				});
+			}
+		});
+	};
+	let newAuth = (clientInstance, appid, next) => {
+		Client.app.models.appuser.login({
+			email: clientInstance.email,
+			password: appid
+		}, (err, authInfo) => {
+			if (err) {
+				return next(err);
+			}
+			authInfo.clientid = clientInstance.id;
+			return next(null, authInfo);
 		});
 	};
 	Client.remoteMethod(
@@ -195,7 +228,8 @@ module.exports = (Client) => {
 			http: {path: '/authappid', verb: 'get'},
 			accepts: [
 				{arg: 'appid', type: 'string', description: 'App id that is sent by the client'},
-				{arg: 'domain', type: 'string', description: 'Domain sent by client for CORS security'}
+				{arg: 'domain', type: 'string', description: 'Domain sent by client for CORS security'},
+				{arg: 'accesstoken', type: 'string', description: 'Access token for check if it is not expired'}
 			],
 			returns: {arg: 'data', type: 'any', root: true}
 		}
