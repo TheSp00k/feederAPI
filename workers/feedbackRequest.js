@@ -21,126 +21,130 @@ worker.addFunction('feedbackRequest', (job) => {
 // console.log(data);
 	Report.working(app, data.report);
 	var Request = app.models.request;
+	app.models.client.findById(data.clientid, (err, clientInstance) => {
+		console.log(clientInstance.requestdelay);
+		var delay = moment().subtract(clientInstance.requestdelay, 'days');
+		// var delay = moment();
+		console.log(delay);
+		// console.log(data.requestdelay);
 
-	// now - 3d >= request.created
-	var delay = moment().subtract(data.requestdelay, 'days');
-	// var delay = moment();
+		var requestQuery = {
+			include: ['products', 'customer'],
+			where: {
+				and: [
+					{type: 'request'},
+					{status: 'created'},
+					{clientid: data.clientid},
+					{created: {lte: delay}}
+				]
+			}
+		};
 
-
-	var requestQuery = {
-		include: ['products', 'customer'],
-		where: {
-			and: [
-				{type: 'request'},
-				{status: 'created'},
-				{clientid: data.clientid},
-				{created: {lte: delay}}
-			]
-		}
-	};
-
-	async.waterfall([
-		(nextStep) => {
-			console.log(JSON.stringify(requestQuery));
-			Request.find(requestQuery, (err, requestInstances) => {
-				if (err) {
-					Report.failed(app, data.report, JSON.stringify(err));
-					return nextStep(job.reportError('failed'));
-				}
-				console.log(!requestInstances || requestInstances.length == 0);
-				let error;
-				if (!requestInstances || requestInstances.length == 0) {
-					error = new Error();
-					error.code = 404;
-					error.statusCode = 404;
-					error.message = 'There are no products and client';
-				}
-				nextStep(error, requestInstances);
-			})
-		},
-		(requestInstances, nextStep) => {
-			let itemsErrors = [];
-			async.each(requestInstances, (request, nextRequest) => {
-				console.log('each');
-				if (!request.products || request.products.length == 0) {
-					let error = new Error();
-					error.code = 404;
-					error.statusCode = 404;
-					error.message = 'There are no products';
-					itemsErrors.push(error);
-					return nextRequest();
-				} else if (!request.customer) {
-					let error = new Error();
-					error.code = 404;
-					error.statusCode = 404;
-					error.message = 'There is no customer';
-					itemsErrors.push(error);
-					return nextRequest();
-				} else {
-					var products = request.products();
-					var customer = request.customer();
-					for (var p = 0; p < products.length; p++) {
-						if (!products[p].sendrequests) {
-							products.splice(p, 1);
-						}
+		async.waterfall([
+			(nextStep) => {
+				console.log(JSON.stringify(requestQuery));
+				Request.find(requestQuery, (err, requestInstances) => {
+					if (err) {
+						Report.failed(app, data.report, JSON.stringify(err));
+						return nextStep(job.reportError('failed'));
 					}
-					if (products.length == 0) {
+					console.log(!requestInstances || requestInstances.length == 0);
+					let error = null;
+					if (!requestInstances || requestInstances.length == 0) {
+						error = new Error();
+						error.code = 404;
+						error.statusCode = 404;
+						error.message = 'There are no products and client';
+					}
+					nextStep(error, requestInstances);
+				})
+			},
+			(requestInstances, nextStep) => {
+				let itemsErrors = [];
+				async.each(requestInstances, (request, nextRequest) => {
+					console.log('each');
+					if (!request.products || request.products.length == 0) {
+						let error = new Error();
+						error.code = 404;
+						error.statusCode = 404;
+						error.message = 'There are no products';
+						itemsErrors.push(error);
 						return nextRequest();
-					}
-					console.log(customer);
-					var mailInfo = {
-						client: {
-							id: request.clientid
-						},
-						requestid: request.id,
-						products: products,
-						customer: customer
-					};
-					console.log('send');
-					Request.sendFeedbackRequest(mailInfo, (err, response) => {
-						console.log(err);
-						console.log(response);
-						if (err) {
-							return nextRequest(err);
+					} else if (!request.customer) {
+						let error = new Error();
+						error.code = 404;
+						error.statusCode = 404;
+						error.message = 'There is no customer';
+						itemsErrors.push(error);
+						return nextRequest();
+					} else {
+						var products = request.products();
+						var customer = request.customer();
+						for (var p = 0; p < products.length; p++) {
+							if (!products[p].sendrequests) {
+								products.splice(p, 1);
+							}
 						}
-
-						request.status = 'sent';
-						Request.upsert(request, (err, requestInstance) => {
+						if (products.length == 0) {
+							return nextRequest();
+						}
+						console.log(customer);
+						var mailInfo = {
+							client: {
+								id: request.clientid
+							},
+							requestid: request.id,
+							products: products,
+							customer: customer
+						};
+						console.log('send');
+						Request.sendFeedbackRequest(mailInfo, (err, response) => {
+							console.log(err);
+							console.log(response);
 							if (err) {
 								return nextRequest(err);
 							}
-							nextRequest();
+
+							request.status = 'sent';
+							Request.upsert(request, (err, requestInstance) => {
+								if (err) {
+									return nextRequest(err);
+								}
+								nextRequest();
+							});
+
 						});
-
-					});
-				}
-			}, (err) => {
-				// if (err) {
-				// 	nextStep(err);
-				// } else {
-				nextStep();
-				// }
-			});
-		}
-
-	], (result, err) => {
-		if (err) {
-			console.log('cia');
-			Report.failed(app, data.report, JSON.stringify(err));
-			return job.reportError('failed');
-		}
-		Report.done(app, data.report, (err) => {
-			if (err)
-				return console.log('feedbackRequest: can not change report status to finished:', err);
-			job.workComplete('completed');
-			jobsDoneCount++;
-			if ((jobsDoneCount - restartAfterJobs) >= 0) {
-				setImmediate(() => {
-					process.exit(0);
+					}
+				}, (err) => {
+					// if (err) {
+					// 	nextStep(err);
+					// } else {
+					nextStep();
+					// }
 				});
 			}
+
+		], (result, err) => {
+			if (err) {
+				console.log('cia');
+				Report.failed(app, data.report, JSON.stringify(err));
+				return job.reportError('failed');
+			}
+			Report.done(app, data.report, (err) => {
+				if (err)
+					return console.log('feedbackRequest: can not change report status to finished:', err);
+				job.workComplete('completed');
+				jobsDoneCount++;
+				if ((jobsDoneCount - restartAfterJobs) >= 0) {
+					setImmediate(() => {
+						process.exit(0);
+					});
+				}
+			});
 		});
 	});
+	// now - 3d >= request.created
+
 
 	// Request.find(requestQuery, (err, requestInstance) => {
 	// 	if (err) {

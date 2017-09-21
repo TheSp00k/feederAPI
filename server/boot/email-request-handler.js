@@ -23,7 +23,7 @@ module.exports = function (app) {
 						}
 						var gearmanClient = gearmanode.client({ port: 4730 });
 						var gearmanJob = gearmanClient.submitJob('feedbackRequest',
-							JSON.stringify({ clientid: clientListInstance[i].id, requestdelay: clientListInstance[i].requestdelay, report: report }),
+							JSON.stringify({ clientid: clientListInstance[i].id, report: report }),
 							{ background: true, unique: 'rep-' + report.id });
 						gearmanJob.on('submited', (data) => {
 							gearmanClient.close();

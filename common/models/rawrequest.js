@@ -3,7 +3,6 @@
 module.exports = (RawRequest) => {
 	RawRequest.observe('before save', (ctx, next) => {
 		let customer, products, request, error;
-
 		if (!ctx.instance.clientid) {
 			error = new Error();
 			error.code = 400;
@@ -58,8 +57,8 @@ module.exports = (RawRequest) => {
 							return next(err);
 						}
 						let productRequests = [];
-						for (let i = 0; i < products.length; i++) {
-							productRequests.push({requestid: requestInstance.id, productid: products[i].id});
+						for (let i = 0; i < productInstance.length; i++) {
+							productRequests.push({requestid: requestInstance.id, productid: productInstance[i].id});
 						}
 						RawRequest.app.models.productrequest.import(productRequests, (err, productInstance) => {
 							next(err);

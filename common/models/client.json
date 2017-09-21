@@ -18,6 +18,9 @@
 		"email": {
 			"type": "string"
 		},
+		"widgetemail": {
+			"type": "string"
+		},
 		"requesttime": {
 			"type": "date"
 		},
@@ -41,10 +44,13 @@
 		},
 		"appid": {
 			"type": "string"
+		},
+		"themecolor": {
+			"type": "string"
 		}
 	},
 	"hidden": [
-		"appid"
+		"appid", "widgetemail"
 	],
 	"validations": [],
 	"relations": {

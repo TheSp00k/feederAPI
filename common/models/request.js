@@ -14,16 +14,24 @@ module.exports = (Request) => {
 				err.message = `Client(${info.client.id}) not found`;
 				return next(err);
 			}
-			let mailer = require('../../server/lib/mailer');
-			let emailContent = `Sveiki, ${clientInstance.name} kviečia palikti atsiliepimą.`;
 
-			let productsStr = '';
-			let formProductsFields = '';
-			let rating = '';
+			Request.app.models.appuser.login({
+				email: 'mailer@reviewslight.com',
+				password: 'tempMailerReviewsLight'
+			}, (err, authInfo) => {
+				if (err) {
+					return next(err);
+				}
+				let mailer = require('../../server/lib/mailer');
+				let emailContent = `Sveiki, ${clientInstance.name} kviečia palikti atsiliepimą.`;
 
-			for (let i = 0; i < info.products.length; i++) {
-				if (info.products[i].name) {
-					rating = `
+				let productsStr = '';
+				let formProductsFields = '';
+				let rating = '';
+
+				for (let i = 0; i < info.products.length; i++) {
+					if (info.products[i].name) {
+						rating = `
 						<td>
 							<input type="radio" id="rating-${info.products[i].id}-1" name="feedbacks[${info.products[i].id}][totalratingscore]" value="1">
 							<label for="rating-${info.products[i].id}-1" style="font-size: 1.3em; color: #eed034;">★</label>
@@ -44,7 +52,7 @@ module.exports = (Request) => {
 							<input type="radio" id="rating-${info.products[i].id}-5" name="feedbacks[${info.products[i].id}][totalratingscore]" value="5">
 							<label for="rating-${info.products[i].id}-5" style="font-size: 1.3em; color: #eed034;">★★★★★</label>
 						</td>`;
-					formProductsFields += `
+						formProductsFields += `
 					<tr>
 						<td style="color: #747474; font-weight: 600; line-height: 25px;" colspan="5">Įvertinkite ${info.products[i].name}:</td>
 					</tr>
@@ -58,13 +66,13 @@ module.exports = (Request) => {
 						${rating}
 					</tr>
 					${clientInstance.showheader ?
-						`<tr style="text-align: left">
+							`<tr style="text-align: left">
 							<td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė:</label></td>
 						</tr>
 						<tr style="text-align: left">
 							<td colspan="5"><input style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%;max-width: 95%;" name="feedbacks[${info.products[i].id}][commentheader]" id="title-${info.products[i].id}" type="text"></td>
 						</tr>`
-						: ''}
+							: ''}
 					<tr style="text-align: left">
 						<td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Komentaras:</label></td>
 					</tr>
@@ -75,48 +83,104 @@ module.exports = (Request) => {
 						<td colspan="5"><hr style="display: block; height: 1px; border: 0; border-top: 1px solid #fff; margin: 3em 1em 3em 1em; padding: 0;"></td>
 					</tr>`;
 
-					productsStr += `${info.products[i].name}`;
-					if ((i + 1) < info.products.length && info.products.length > 1) {
-						productsStr = productsStr + ',';
+						productsStr += `${info.products[i].name}`;
+						if ((i + 1) < info.products.length && info.products.length > 1) {
+							productsStr = productsStr + ',';
+						}
 					}
 				}
-			}
-			var formStr = `
-			<form action="${apiUrl}/feedbacks/sendfeedback" method="post">
-				<input type="hidden" name="clientid" value="${info.client.id}">
-				<input type="hidden" name="requestid" value="${info.requestid}">
-				<input type="hidden" name="customerid" value="${info.customer.id}">
-				<table style="text-align: center; width: 95%">
-					<tr class="logo"><td colspan="5"><img width="200" src="${clientInstance.logourl}"></td></tr>	
-					<tr class="content"><td style="color: #747474; font-weight: 600; line-height: 25px;" colspan="5">${emailContent}</td></tr>
-					${formProductsFields}
-					<tr>
-						<td colspan="5"><input style="border: none;padding: 15px 30px; background-color: #fa7e28; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Pateikti komentarą"></td>
-					</tr>
-					<tr>
-						<td colspan="5">Jei nematote formos spauskite <a href="${adminUrl}/request?requestid=${info.requestid}">čia</a></td>
-					</tr>
-				</table>
-			</form>`;
-			var body = `
-		<body class="main-wrapper" style="margin-top: 0;margin-bottom: 0;margin-left: 0;margin-right: 0;padding-top: 30px;padding-bottom: 0;padding-left: 0;padding-right: 0;min-width: 100%;background-color: #f5f5f5">
-			<div style="padding: 25px 10px; width: 90%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;">
-				${formStr}
-			</div>
-
-		</body>`;
-			var html = `
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		<html>
-		${body}
-		</html>
-		`;
-			// console.log(html);
-			mailer.sendEmail('kiesha192@gmail.com', Request.app.get('emailSendFrom'), 'labas', html, (err) => {
-				next(err, {message: 'success!', code: 200});
+				var formStr = `
+					<form action="${apiUrl}/feedbacks/sendfeedback" method="post">
+						<input type="hidden" name="clientid" value="${info.client.id}">
+						<input type="hidden" name="requestid" value="${info.requestid}">
+						<input type="hidden" name="customerid" value="${info.customer.id}">
+						<input type="hidden" name="token" value="${authInfo.id}">
+						<table style="text-align: center; width: 95%">
+							<tr class="logo"><td colspan="5"><img width="200" src="${clientInstance.logourl}"></td></tr>	
+							<tr class="content"><td style="color: #747474; font-weight: 600; line-height: 25px;" colspan="5">${emailContent}</td></tr>
+							${formProductsFields}
+							<tr>
+								<td colspan="5"><input style="border: none;padding: 15px 30px; background-color: #fa7e28; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Pateikti komentarą"></td>
+							</tr>
+							<tr>
+								<td colspan="5">Jei nematote formos spauskite <a href="${adminUrl}/#/request/${info.requestid}/${authInfo.id}">čia</a></td>
+							</tr>
+						</table>
+					</form>`;
+				var body = `
+					<body class="main-wrapper" style="margin-top: 0;margin-bottom: 0;margin-left: 0;margin-right: 0;padding-top: 30px;padding-bottom: 0;padding-left: 0;padding-right: 0;min-width: 100%;background-color: #f5f5f5">
+						<div style="padding: 25px 10px; width: 90%; max-width: 600px; border-collapse: separate;border-spacing: 0;margin-left: auto;margin-right: auto; border: 1px solid #EAEAEA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background-color: #ffffff; overflow: hidden;">
+							${formStr}
+						</div>
+					</body>`;
+				var html = `
+					<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+					<html>
+						${body}
+					</html>`;
+				// console.log(html);
+				mailer.sendEmail(info.customer.email, Request.app.get('emailSendFrom'), 'labas', html, (err) => {
+					next(err, {message: 'success!', code: 200});
+				});
 			});
 		});
 	};
+	Request.getForFeedback = (requestid, token, next) => {
+		console.log(requestid, token);
+		Request.app.models.AccessToken.findById(token, (err, authInfo) => {
+			console.log(err);
+			console.log(authInfo);
+			if (err) {
+				return next(err);
+			}
+			if (!authInfo) {
+				let error = new Error();
+				error.statusCode = 401;
+				error.name = 'Error';
+				error.message = 'Authorization Required';
+				return next(error);
+			}
+			const query = {include: ['products', 'customer', 'client']};
+			Request.findById(requestid, query, (err, requestInfo) => {
+				if (err) {
+					return next(err);
+				}
+				if (!requestInfo) {
+					let error = new Error();
+					error.statusCode = 404;
+					error.message = 'Request not found';
+					return next(error);
+				}
+				if (requestInfo.status != 'sent') {
+					let error = new Error();
+					error.statusCode = 400;
+					error.message = 'Feedback already left';
+					return next(error);
+				}
+					next(null, requestInfo);
+
+				// TODO delete only after feedback submit
+				// Request.app.models.AccessToken.deleteById(token, (err, info) => {
+				// 	next(err, requestInfo);
+				// });
+			})
+		});
+	};
+
+	Request.remoteMethod(
+		'getForFeedback',
+		{
+			http: {path: '/getforfeedback', verb: 'get'},
+			// accepts: {},
+			returns: {arg: 'requestInfo', root: true, type: 'object'},
+			accepts: [
+				{arg: 'requestid', type: 'string'},
+				{arg: 'token', type: 'string'}
+			]
+			// returns: { arg: 'totalscore', root: true, type: 'number' }
+		}
+	);
+
 	Request.remoteMethod(
 		'sendFeedbackRequest',
 		{

@@ -3,7 +3,10 @@ var async = require('async');
 module.exports = (Feedback) => {
 
 	Feedback.afterRemote('sendFeedback', (context, instance, next) => {
-		var res = context.res; //this is the same response object you get in Express
+		var res = context.res;
+		if (context.args.type == 'json') {
+			return next(null, context.result);
+		}
 		let message = `<div style="width: 500px;
 			margin: 20% auto;
 			text-align: center;
@@ -15,7 +18,6 @@ module.exports = (Feedback) => {
 	});
 
 	Feedback.beforeRemote('sendFeedback', (context, unused, next) => {
-		console.log(context.req.body);
 		Feedback.app.models.request.findById(context.req.body.requestid, (err, requestInstance) => {
 			if (err) {
 				return next(err);
@@ -29,8 +31,10 @@ module.exports = (Feedback) => {
 				err.code = 404;
 				err.message = 'You have already left a feedback.';
 			}
-
 			if (err) {
+				if (context.req.query.type == 'json') {
+					return next(err);
+				}
 				let error = `<div style="width: 500px;
 					margin: 20% auto;
 					text-align: center;
@@ -45,8 +49,7 @@ module.exports = (Feedback) => {
 		});
 	});
 
-	Feedback.sendFeedback = (data, next) => {
-		console.log('asdasdsa');
+	Feedback.sendFeedback = (data, type, next) => {
 		Feedback.app.models.client.findById(data.clientid, (err, clientInstance) => {
 			if (err) {
 				return next(err);
@@ -69,6 +72,9 @@ module.exports = (Feedback) => {
 				})
 			}, (err) => {
 				console.log(err);
+				if (err) {
+					return next(err);
+				}
 				Feedback.app.models.request.findById(data.requestid, (err, requestInstance) => {
 					if (err) {
 						return next(err);
@@ -82,7 +88,14 @@ module.exports = (Feedback) => {
 					requestInstance.status = 'replied';
 
 					Feedback.app.models.request.upsert(requestInstance, (err, upsertRequest) => {
-						next(err, {code: 200, message: 'success'});
+						if (err) {
+							return next(err);
+						}
+						next(null, {code: 200, message: 'Thank you for leaving a feedback'});
+						//
+						// Feedback.app.models.AccessToken.deleteById(data.token, (err, info) => {
+						// 	next(err, {code: 200, message: 'success'});
+						// });
 					});
 				});
 			});
@@ -93,12 +106,17 @@ module.exports = (Feedback) => {
 		{
 			description: 'Creates or updates a product or a list of products',
 			http: {path: '/sendfeedback', verb: 'post'},
-			accepts: {
+			accepts: [{
 				arg: 'data',
 				type: 'object',
 				http: {source: 'body'},
 				description: 'An object or array of objects'
 			},
+			{
+				arg: 'type',
+				type: 'string',
+				description: 'For returning json'
+			}],
 			returns: {arg: 'data', type: 'any', root: true}
 		}
 	);

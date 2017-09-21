@@ -30,7 +30,11 @@ module.exports = (Client) => {
 			if (userInstance.feedbackadmin) {
 				return next();
 			}
-			Client.findOne({where: {email: userInstance.email}}, (err, clientInstance) => {
+			let where = {widgetemail: userInstance.email};
+			if (ctx.query.requestfrom == 'adminpanel') {
+				where = {email: userInstance.email};
+			}
+			Client.findOne({where: where}, (err, clientInstance) => {
 				if (err) {
 					return next(err);
 				}
@@ -109,7 +113,6 @@ module.exports = (Client) => {
 				var gearmanJob = gearmanClient.submitJob('feedbackRequest',
 					JSON.stringify({
 						clientid: clientInstance.id,
-						requestdelay: clientInstance.requestdelay,
 						report: report
 					}),
 					{background: true, unique: 'rep-' + report.id});
@@ -127,7 +130,12 @@ module.exports = (Client) => {
 		ctx.req.body.appid = Client.generateId();
 		let clientUser = {
 			email: ctx.req.body.email,
-			password: ctx.req.body.appid,
+			password: Client.generateId()
+			// clientid: ctx.req.body.id
+		};
+		let widgetUser = {
+			email: `widget${ctx.req.body.email}`,
+			password: Client.generateId()
 			// clientid: ctx.req.body.id
 		};
 
@@ -140,7 +148,18 @@ module.exports = (Client) => {
 				error.message = 'Something went wrong';
 				return next(error);
 			}
-			next();
+			Client.app.models.appuser.create(widgetUser, (err, widgetUserInstance) => {
+				if (err) {
+					return next(err);
+				}
+				if (!widgetUserInstance) {
+					let error = new Error();
+					error.message = 'Something went wrong';
+					return next(error);
+				}
+				
+				next();
+			});
 		});
 	});
 
@@ -162,6 +181,7 @@ module.exports = (Client) => {
 	});
 
 	Client.authAppId = (appid, domain, accesstoken, next) => {
+		console.log(appid, domain);
 		Client.findOne({
 			where: {and: [{appid: appid}, {domain: domain}]},
 			restriction: 'none'
@@ -173,7 +193,7 @@ module.exports = (Client) => {
 				let error = new Error();
 				error.statusCode = 404;
 				error.code = 404;
-				error.message = 'App id is invalid';
+				error.message = 'Access denied.';
 				return next(error);
 			}
 			if (accesstoken) {
@@ -211,7 +231,7 @@ module.exports = (Client) => {
 	};
 	let newAuth = (clientInstance, appid, next) => {
 		Client.app.models.appuser.login({
-			email: clientInstance.email,
+			email: clientInstance.widgetemail,
 			password: appid
 		}, (err, authInfo) => {
 			if (err) {
