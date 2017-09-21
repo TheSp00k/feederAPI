@@ -119,7 +119,7 @@ module.exports = (Request) => {
 						${body}
 					</html>`;
 				// console.log(html);
-				mailer.sendEmail(info.customer.email, Request.app.get('emailSendFrom'), 'labas', html, (err) => {
+				mailer.sendEmail(info.customer.email, Request.app.get('emailSendFrom'), 'labas', html, clientInstance.mailconfig, (err) => {
 					next(err, {message: 'success!', code: 200});
 				});
 			});

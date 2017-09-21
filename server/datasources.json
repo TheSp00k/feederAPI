@@ -30,5 +30,24 @@
         }
       }
     ]
+  },
+  "geradovanaEmailDataSource": {
+    "name": "geradovanaEmailDataSource",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "email-smtp.eu-west-1.amazonaws.com",
+        "secure": true,
+        "port": 25,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "AKIAJLWNWBS6GAOBLESQ",
+          "pass": "ApcXjwJ0K9JeCv+M2jQgM6jRQrIxKWy97g+ScvaDssnJ"
+        }
+      }
+    ]
   }
 }

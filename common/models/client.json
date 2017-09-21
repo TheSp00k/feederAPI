@@ -45,6 +45,9 @@
 		"appid": {
 			"type": "string"
 		},
+		"mailconfig": {
+			"type": "string"
+		},
 		"themecolor": {
 			"type": "string"
 		}
