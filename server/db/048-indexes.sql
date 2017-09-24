@@ -1,0 +1,29 @@
+ALTER TABLE `client`
+ADD INDEX `MAIL_INDEX` (`email` ASC),
+ADD INDEX `MAIL_INDEX2` (`widgetemail` ASC);
+
+ALTER TABLE `product`
+ADD INDEX `NUMER_INDEX` (`productnumber` ASC),
+ADD INDEX `CREATED_INDEX` (`created` ASC),
+ADD INDEX `SHOWFEEDBACKS_INDEX` (`showfeedbacks` ASC);
+
+ALTER TABLE `productrequest`
+ADD UNIQUE INDEX `UNIQUE_PRODUCT_REQIEST` (`productid` ASC, `requestid` ASC);
+
+ALTER TABLE `rawrequest`
+ADD INDEX `CLIENT_INDEX` (`clientid` ASC),
+ADD INDEX `CREATED_INDEX` (`created` ASC);
+
+ALTER TABLE `feedback`
+ADD INDEX `PRODUCT_INDEX` (`productid` ASC),
+ADD INDEX `APPROVED_INDEX` (`approved` ASC),
+ADD INDEX `REJECTED_INDEX` (`rejected` ASC),
+ADD INDEX `PURCHASED_INDEX` (`purchased` ASC),
+ADD INDEX `CLIENT_INDEX` (`clientid` ASC),
+ADD INDEX `CREATED_INDEX` (`created` ASC);
+
+ALTER TABLE `request`
+ADD INDEX `CLIENT_INDEX` (`clientid` ASC),
+ADD INDEX `STATUS_INDEX` (`status` ASC),
+ADD INDEX `CREATED_INDEX` (`created` ASC),
+ADD INDEX `TYPE_INDEX` (`type` ASC);

@@ -5,57 +5,58 @@ var gearmanode = require('gearmanode');
 var Report = require('../../server/lib/report');
 module.exports = (Client) => {
 
-	Client.observe('access', (ctx, next) => {
-		if (ctx.query.restriction == 'none') {
-			delete ctx.query.restriction;
-			return next();
-		}
-		if (!ctx.options.accessToken) {
-			return next();
-		}
-
-		Client.app.models.appuser.findById(ctx.options.accessToken.userId, (err, userInstance) => {
-			if (err) {
-				return next(err);
-			}
-			console.log(userInstance);
-			if (!userInstance || userInstance.length == 0) {
-				let error = new Error();
-				error.statusCode = 401;
-				error.code = 401;
-				error.message = 'Authorization Required';
-				return next(error);
-			}
-
-			if (userInstance.feedbackadmin) {
-				return next();
-			}
-			let where = {widgetemail: userInstance.email};
-			if (ctx.query.requestfrom == 'adminpanel') {
-				where = {email: userInstance.email};
-			}
-			Client.findOne({where: where}, (err, clientInstance) => {
-				if (err) {
-					return next(err);
-				}
-				if (!clientInstance) {
-					let error = new Error();
-					error.statusCode = 401;
-					error.code = 401;
-					error.message = 'Authorization Required';
-					return next(error);
-				}
-				if (ctx.query.where) {
-					ctx.query.where.id = clientInstance.id;
-				} else {
-					ctx.query.where = {
-						id: clientInstance.id
-					};
-				}
-				next();
-			});
-		});
-	});
+	// Client.observe('access', (ctx, next) => {
+	// 	if (ctx.query.restriction == 'none') {
+	// 		delete ctx.query.restriction;
+	// 		ctx.query.requestfrom = 'widget';
+	// 		return next();
+	// 	}
+	// 	console.log(ctx.query);
+	// 	if (!ctx.options.accessToken) {
+	// 		return next();
+	// 	}
+	//
+	// 	Client.app.models.appuser.findById(ctx.options.accessToken.userId, (err, userInstance) => {
+	// 		if (err) {
+	// 			return next(err);
+	// 		}
+	// 		if (!userInstance || userInstance.length == 0) {
+	// 			let error = new Error();
+	// 			error.statusCode = 401;
+	// 			error.code = 401;
+	// 			error.message = 'Authorization Required';
+	// 			return next(error);
+	// 		}
+	//
+	// 		if (userInstance.feedbackadmin) {
+	// 			return next();
+	// 		}
+	// 		let where = {email: userInstance.email};
+	// 		if (ctx.query.requestfrom == 'widget') {
+	// 			where = {widgetemail: userInstance.email};
+	// 		}
+	// 		Client.findOne({where: where}, (err, clientInstance) => {
+	// 			if (err) {
+	// 				return next(err);
+	// 			}
+	// 			if (!clientInstance) {
+	// 				let error = new Error();
+	// 				error.statusCode = 401;
+	// 				error.code = 401;
+	// 				error.message = 'Authorization Required';
+	// 				return next(error);
+	// 			}
+	// 			if (ctx.query.where) {
+	// 				ctx.query.where.id = clientInstance.id;
+	// 			} else {
+	// 				ctx.query.where = {
+	// 					id: clientInstance.id
+	// 				};
+	// 			}
+	// 			next();
+	// 		});
+	// 	});
+	// });
 
 	Client.generateId = () => {
 		var d = new Date().getTime();
@@ -67,8 +68,6 @@ module.exports = (Client) => {
 		return uuid;
 	};
 	Client.observe('before save', (ctx, next) => {
-		console.log(ctx.instance);
-		console.log(ctx.data);
 		if (ctx.instance.id) {
 			Client.findById(ctx.instance.id, (err, clientInstance) => {
 				if (err) {

@@ -65,14 +65,11 @@ module.exports = (Request) => {
 					<tr>
 						${rating}
 					</tr>
-					${clientInstance.showheader ?
-							`<tr style="text-align: left">
-							<td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė:</label></td>
-						</tr>
-						<tr style="text-align: left">
-							<td colspan="5"><input style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%;max-width: 95%;" name="feedbacks[${info.products[i].id}][commentheader]" id="title-${info.products[i].id}" type="text"></td>
-						</tr>`
-							: ''}
+					
+					
+					
+					
+					
 					<tr style="text-align: left">
 						<td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Komentaras:</label></td>
 					</tr>
@@ -89,6 +86,22 @@ module.exports = (Request) => {
 						}
 					}
 				}
+
+				/*
+				*
+				* disabled header
+				* ${clientInstance.showheader ?
+				 `<tr style="text-align: left">
+				 <td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė:</label></td>
+				 </tr>
+				 <tr style="text-align: left">
+				 <td colspan="5"><input style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%;max-width: 95%;" name="feedbacks[${info.products[i].id}][commentheader]" id="title-${info.products[i].id}" type="text"></td>
+				 </tr>`
+				 : ''}
+				*
+				*
+				* */
+
 				var formStr = `
 					<form action="${apiUrl}/feedbacks/sendfeedback" method="post">
 						<input type="hidden" name="clientid" value="${info.client.id}">
