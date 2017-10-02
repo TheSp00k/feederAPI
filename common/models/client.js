@@ -81,6 +81,7 @@ module.exports = (Client) => {
 					return next(error);
 				}
 				ctx.instance.appid = clientInstance.appid;
+				ctx.instance.widgetemail = clientInstance.widgetemail;
 				next();
 			})
 		} else {
