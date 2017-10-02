@@ -32,7 +32,7 @@ module.exports = (Request) => {
 				for (let i = 0; i < info.products.length; i++) {
 					if (info.products[i].name) {
 						rating = `
-						<td>
+						<td style="text-align: left">
 							<input type="radio" id="rating-${info.products[i].id}-1" name="feedbacks[${info.products[i].id}][totalratingscore]" value="1">
 							<label for="rating-${info.products[i].id}-1" style="font-size: 1.3em; color: #eed034;">★</label>
 						</td>
@@ -54,30 +54,28 @@ module.exports = (Request) => {
 						</td>`;
 						formProductsFields += `
 					<tr>
-						<td style="color: #747474; font-weight: 600; line-height: 25px;" colspan="5">Įvertinkite ${info.products[i].name}:</td>
+						<td style="color: #9b999a; font-weight: 600; line-height: 25px;" colspan="5">${info.products[i].name}</td>
 					</tr>
-					<tr>
-						<td style="padding-top: 10px; padding-bottom: 30px;" colspan="5">
-							<input type="hidden" name="feedbacks[${info.products[i].id}][productid]" value="${info.products[i].id}">
-							<img width="200" src="${info.products[i].photourl}">
-						</td>
+					<tr style="text-align: left">
+						<td colspan="5"><label style="color: #9b999a; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Įvertinimas:</label></td>
 					</tr>
 					<tr>
 						${rating}
 					</tr>
 					
 					
-					
-					
-					
 					<tr style="text-align: left">
-						<td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Komentaras:</label></td>
+						<td colspan="5"><label style="color: #9b999a; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Komentaras:</label></td>
 					</tr>
 					<tr style="text-align: left">
-						<td colspan="5"><textarea style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%; max-width: 95%;" name="feedbacks[${info.products[i].id}][commentcontent]" id="comment-${info.products[i].id}" rows="5"></textarea></td>
+						<td colspan="5">
+							<textarea style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%; max-width: 95%;" name="feedbacks[${info.products[i].id}][commentcontent]" id="comment-${info.products[i].id}" rows="5">
+							</textarea>
+							<input type="hidden" name="feedbacks[${info.products[i].id}][productid]" value="${info.products[i].id}">
+						</td>
 					</tr>
 					<tr>
-						<td colspan="5"><hr style="display: block; height: 1px; border: 0; border-top: 1px solid #fff; margin: 3em 1em 3em 1em; padding: 0;"></td>
+						<td colspan="5"><hr style="display: block; height: 1px; border: 0; border-top: 1px solid #fff; margin: 1em; padding: 0;"></td>
 					</tr>`;
 
 						productsStr += `${info.products[i].name}`;
@@ -92,7 +90,7 @@ module.exports = (Request) => {
 				* disabled header
 				* ${clientInstance.showheader ?
 				 `<tr style="text-align: left">
-				 <td colspan="5"><label style="color: #747474; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė:</label></td>
+				 <td colspan="5"><label style="color: #9b999a; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Antraštė:</label></td>
 				 </tr>
 				 <tr style="text-align: left">
 				 <td colspan="5"><input style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%;max-width: 95%;" name="feedbacks[${info.products[i].id}][commentheader]" id="title-${info.products[i].id}" type="text"></td>
@@ -109,14 +107,14 @@ module.exports = (Request) => {
 						<input type="hidden" name="customerid" value="${info.customer.id}">
 						<input type="hidden" name="token" value="${authInfo.id}">
 						<table style="text-align: center; width: 95%">
-							<tr class="logo"><td colspan="5"><img width="200" src="${clientInstance.logourl}"></td></tr>	
-							<tr class="content"><td style="color: #747474; font-weight: 600; line-height: 25px;" colspan="5">${emailContent}</td></tr>
+							<tr class="logo"><td style="text-align: center; text-align: -moz-center; text-align: -webkit-center;" colspan="5"><img style="display: block;" width="200" height="150" title="logo" alt="logo" src="${clientInstance.logourl}"></td></tr>	
+							<tr class="content"><td style="color: #9b999a; font-weight: 600; line-height: 25px;" colspan="5">${emailContent}</td></tr>
 							${formProductsFields}
 							<tr>
-								<td colspan="5"><input style="border: none;padding: 15px 30px; background-color: #fa7e28; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Pateikti komentarą"></td>
+								<td colspan="5"><input style="-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; border: none;padding: 15px 30px; background-color: ${clientInstance.themecolor ? clientInstance.themecolor : '#fa7e28'}; color: white; font-size: 16px; font-weight: 600; letter-spacing: 1.8px;" type="submit" value="Palikti atsiliepimą/-us"></td>
 							</tr>
 							<tr>
-								<td colspan="5">Jei nematote formos spauskite <a href="${adminUrl}/#/request/${info.requestid}/${authInfo.id}">čia</a></td>
+								<td style="padding-top: 15px;" colspan="5"><a style="color: #9b999a; font-weight: 600;" href="${adminUrl}/#/request/${info.requestid}/${authInfo.id}">Jei nematote formos, spauskite čia</a></td>
 							</tr>
 						</table>
 					</form>`;
