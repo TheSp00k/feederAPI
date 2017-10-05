@@ -77,6 +77,18 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "*"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "totals"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "findOne"
     }
   ],
   "methods": {}

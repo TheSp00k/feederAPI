@@ -54,7 +54,7 @@ module.exports = (Request) => {
 						</td>`;
 						formProductsFields += `
 					<tr>
-						<td style="color: #9b999a; font-weight: 600; line-height: 25px;" colspan="5">${info.products[i].name}</td>
+						<td style="color: #9b999a; font-weight: 600; line-height: 25px; font-size: 16px; padding-top: 25px;" colspan="5">${info.products[i].name}</td>
 					</tr>
 					<tr style="text-align: left">
 						<td colspan="5"><label style="color: #9b999a; font-weight: 600; display: inline-block; padding-top: 15px;" for="title-${info.products[i].id}">Įvertinimas:</label></td>
@@ -166,9 +166,13 @@ module.exports = (Request) => {
 					let error = new Error();
 					error.statusCode = 400;
 					error.message = 'Feedback already left';
-					return next(error);
+					error.messageCode = 'FEEDBACK_LEFT';
+					error.clientInfo = requestInfo.client();
+					console.log(JSON.stringify(error));
+					return next(null, error);
 				}
-					next(null, requestInfo);
+
+				next(null, requestInfo);
 
 				// TODO delete only after feedback submit
 				// Request.app.models.AccessToken.deleteById(token, (err, info) => {

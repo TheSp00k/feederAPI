@@ -91,7 +91,7 @@ module.exports = (Feedback) => {
 						if (err) {
 							return next(err);
 						}
-						next(null, {code: 200, message: 'Thank you for leaving a feedback'});
+						next(null, {code: 200, clientInfo: clientInstance, message: 'Thank you for leaving a feedback'});
 						//
 						// Feedback.app.models.AccessToken.deleteById(data.token, (err, info) => {
 						// 	next(err, {code: 200, message: 'success'});

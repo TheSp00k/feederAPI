@@ -1,8 +1,13 @@
 'use strict';
 
 module.exports = (Product) => {
-	Product.totals = (productid, next) => {
-		var filter = {
+	Product.totals = (productid, clientid, productnumber, next) => {
+		let where = {productid: productid};
+		if (productnumber && clientid) {
+			where.and = [{clientid: clientid}, {productnumber: productnumber}];
+		}
+		let filter = {
+			where: where,
 			include: {
 				relation: 'feedbacks',
 				scope: {
@@ -10,7 +15,13 @@ module.exports = (Product) => {
 				}
 			}
 		};
-		Product.findById(productid, filter, (err, product) => {
+		Product.findOne(filter, (err, product) => {
+			if (err) {
+				return next(err);
+			}
+			if (!product) {
+				return next();
+			}
 			var totalStars = 0,
 				totalFeedbackCount = 0,
 				feedbacks = product.feedbacks(),
@@ -41,7 +52,8 @@ module.exports = (Product) => {
 
 			var result = {
 				totalratingscore: Math.round(totalProductScore * 10) / 10,
-				startotals: starTotals
+				startotals: starTotals,
+				totalFeedbackCount: totalFeedbackCount
 			};
 
 			next(err, result);
@@ -86,7 +98,9 @@ module.exports = (Product) => {
 		{
 			http: {path: '/totals', verb: 'get'},
 			accepts: [
-				{arg: 'productid', type: 'number'}
+				{arg: 'productid', type: 'number'},
+				{arg: 'clientid', type: 'number'},
+				{arg: 'productnumber', type: 'string'}
 			],
 			returns: {arg: 'feedbacktotals', root: true, type: 'object'}
 		}
