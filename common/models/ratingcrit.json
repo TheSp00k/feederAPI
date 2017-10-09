@@ -1,19 +1,13 @@
 {
-  "name": "rating",
+  "name": "ratingcrit",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "critid": {
-      "type": "number"
-    },
-    "score": {
-      "type": "number"
-    },
-    "feedbackid": {
-      "type": "number"
+    "name": {
+      "type": "string"
     },
     "clientid": {
       "type": "string"
@@ -25,16 +19,6 @@
       "type": "belongsTo",
       "model": "client",
       "foreignKey": "clientid"
-    },
-    "feedback": {
-      "type": "belongsTo",
-      "model": "feedback",
-      "foreignKey": "feedbackid"
-    },
-    "ratingcrit": {
-      "type": "belongsTo",
-      "model": "ratingcrit",
-      "foreignKey": "critid"
     }
   },
   "acls": [

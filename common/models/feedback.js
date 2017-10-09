@@ -6,15 +6,20 @@ module.exports = (Feedback) => {
 		var res = context.res;
 		if (context.args.type == 'json') {
 			return next(null, context.result);
+		} else {
+			console.log(context.args.data.token);
+			// let message = `<div style="width: 500px;
+			// 	margin: 20% auto;
+			// 	text-align: center;
+			// 	padding: 20px;
+			// 	background-color: #dff0d8;
+			// 	border-radius: 10px;
+			// 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">Thank you for leaving a feedback</div>`;
+			// res.send(message);
+			res.writeHead(302, {Location: `${Feedback.app.get('adminUrl')}/#/request/${context.req.body.requestid}/${context.args.data.token}`});
+			res.end();
+			// return next();
 		}
-		let message = `<div style="width: 500px;
-			margin: 20% auto;
-			text-align: center;
-			padding: 20px;
-			background-color: #dff0d8;
-			border-radius: 10px;
-			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">Thank you for leaving a feedback</div>`;
-		res.send(message);
 	});
 
 	Feedback.beforeRemote('sendFeedback', (context, unused, next) => {
@@ -35,16 +40,18 @@ module.exports = (Feedback) => {
 				if (context.req.query.type == 'json') {
 					return next(err);
 				}
-				let error = `<div style="width: 500px;
-					margin: 20% auto;
-					text-align: center;
-					padding: 20px;
-					background-color: #f2dede;
-					border-radius: 10px;
-					font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">${err.message}</div>`;
-				context.res.send(error);
+				// let error = `<div style="width: 500px;
+				// 	margin: 20% auto;
+				// 	text-align: center;
+				// 	padding: 20px;
+				// 	background-color: #f2dede;
+				// 	border-radius: 10px;
+				// 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">${err.message}</div>`;
+				context.res.writeHead(302, {Location: `${Feedback.app.get('adminUrl')}/#/request/${context.req.body.requestid}/${context.args.data.token}`});
+				context.res.end();
+				return next();
 			} else {
-				next();
+				return next();
 			}
 		});
 	});
