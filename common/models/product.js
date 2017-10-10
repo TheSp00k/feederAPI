@@ -2,7 +2,7 @@
 
 module.exports = (Product) => {
 	Product.totals = (productid, clientid, productnumber, next) => {
-		let where = {productid: productid};
+		let where = {id: productid};
 		if (productnumber && clientid) {
 			where.and = [{clientid: clientid}, {productnumber: productnumber}];
 		}

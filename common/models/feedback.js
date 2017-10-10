@@ -16,7 +16,7 @@ module.exports = (Feedback) => {
 			// 	border-radius: 10px;
 			// 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;">Thank you for leaving a feedback</div>`;
 			// res.send(message);
-			res.writeHead(302, {Location: `${Feedback.app.get('adminUrl')}/#/request/${context.req.body.requestid}/${context.args.data.token}`});
+			res.writeHead(302, {Location: `${Feedback.app.get('adminUrl')}/#/request/${context.req.body.requestid}/${context.args.data.token}/1`});
 			res.end();
 			// return next();
 		}
