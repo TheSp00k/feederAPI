@@ -1,0 +1,3 @@
+ALTER TABLE `product`
+DROP INDEX `UNIQUE_PRODUCT`,
+ADD UNIQUE INDEX `UNIQUE_PRODUCT` (`clientid` ASC, `productnumber` ASC);

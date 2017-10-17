@@ -71,7 +71,7 @@ module.exports = (Request) => {
 						<td colspan="5">
 							<textarea style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #d7d7d7;padding: 5px 10px;line-height: 30px;width: 100%; max-width: 95%;" name="feedbacks[${info.products[i].id}][commentcontent]" id="comment-${info.products[i].id}" rows="5">
 							</textarea>
-							<input type="hidden" name="feedbacks[${info.products[i].id}][productid]" value="${info.products[i].id}">
+							<input type="hidden" name="feedbacks[${info.products[i].id}][productnumber]" value="${info.products[i].productnumber}">
 						</td>
 					</tr>
 					<tr>

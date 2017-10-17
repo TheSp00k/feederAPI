@@ -57,6 +57,7 @@ module.exports = (Feedback) => {
 	});
 
 	Feedback.sendFeedback = (data, type, next) => {
+		console.log(data);
 		Feedback.app.models.client.findById(data.clientid, (err, clientInstance) => {
 			if (err) {
 				return next(err);
@@ -71,12 +72,23 @@ module.exports = (Feedback) => {
 				feedback.clientid = data.clientid;
 				feedback.customerid = data.customerid;
 				feedback.purchased = true;
-				Feedback.upsert(feedback, (err, feedbackInstance) => {
-					if (err) {
-						return nextFeedback(err);
+				Feedback.app.models.product.findOne(
+					{where: {and: [{clientid: data.clientid}, {productnumber: data.productnumber}]}},
+					(err, productInstance) => {
+						if (err) {
+							return nextFeedback(err);
+						}
+						if (productInstance.id) {
+							feedback.productid = productInstance.id;
+						}
+						Feedback.upsert(feedback, (err, feedbackInstance) => {
+							if (err) {
+								return nextFeedback(err);
+							}
+							nextFeedback();
+						})
 					}
-					nextFeedback();
-				})
+				);
 			}, (err) => {
 				console.log(err);
 				if (err) {
@@ -108,6 +120,85 @@ module.exports = (Feedback) => {
 			});
 		});
 	};
+
+	Feedback.sendFeedbackFromWidget = (data, next) => {
+		if (!data.clientid) {
+			return next({errorCode: 'CLIENT_NOT_FOUND', statusCode: 404});
+		}
+		if (!data.productnumber) {
+			return next({errorCode: 'PRODUCT_NOT_FOUND', statusCode: 404});
+		}
+		let productInfo = {
+			clientid: data.clientid,
+			productnumber: data.productnumber,
+			name: data.name,
+			photourl: data.photourl,
+			sendrequests: true,
+			showfeedbacks: true
+		};
+		console.log(data, productInfo);
+		Feedback.app.models.product.findOne(
+			{where: {and: [{clientid: data.clientid}, {productnumber: data.productnumber}]}},
+			(err, productInstance) => {
+				if (err) {
+					return next(err);
+				}
+				if (productInstance && productInstance.id) {
+					productInfo.id = productInstance.id;
+				}
+				Feedback.app.models.product.upsert(productInfo, (err, productInstance) => {
+					if (err) {
+						return next(err);
+					}
+					let feedbackInfo = {
+						productid: productInstance.id,
+						commentcontent: data.commentcontent,
+						totalratingscore: data.totalratingscore,
+						clientid: data.clientid
+					};
+					Feedback.app.models.customer.findOne(
+						{where: {and: [{clientid: data.clientid}, {email: data.customer.email}]}},
+						(err, customerInstance) => {
+							if (err) {
+								return next(err);
+							}
+							if (customerInstance && customerInstance.id) {
+								feedbackInfo.customerid = customerInstance.id;
+							}
+							Feedback.app.models.customer.upsert({
+								clientid: data.clientid,
+								email: data.customer.email,
+								id: customerInstance.id
+							}, (err, customerInstance) => {
+								if (err) {
+									return next(err);
+								}
+								feedbackInfo.customerid = customerInstance.id;
+								Feedback.upsert(feedbackInfo, (err, feedbackInstance) => {
+									return next(err, feedbackInstance);
+								})
+							})
+						}
+					);
+				});
+			});
+	};
+
+	Feedback.remoteMethod(
+		'sendFeedbackFromWidget',
+		{
+			description: 'Send feedback from widget with customer and product information',
+			http: {path: '/sendfeedbackfromwidget', verb: 'post'},
+			accepts: [{
+				arg: 'data',
+				type: 'object',
+				http: {source: 'body'},
+				description: 'An object'
+			}],
+			returns: {arg: 'data', type: 'any', root: true}
+		}
+	);
+
 	Feedback.remoteMethod(
 		'sendFeedback',
 		{
