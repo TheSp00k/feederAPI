@@ -50,6 +50,9 @@
 		},
 		"themecolor": {
 			"type": "string"
+		},
+		"redirecturl": {
+			"type": "string"
 		}
 	},
 	"hidden": [
