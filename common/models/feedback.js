@@ -154,7 +154,13 @@ module.exports = (Feedback) => {
 						productid: productInstance.id,
 						commentcontent: data.commentcontent,
 						totalratingscore: data.totalratingscore,
-						clientid: data.clientid
+						clientid: data.clientid,
+						purchased: false
+					};
+					let customerInfo = {
+						clientid: data.clientid,
+						email: data.customer.email,
+						secretemail: Feedback.app.models.customer.hideEmail(data.customer.email)
 					};
 					Feedback.app.models.customer.findOne(
 						{where: {and: [{clientid: data.clientid}, {email: data.customer.email}]}},
@@ -164,12 +170,9 @@ module.exports = (Feedback) => {
 							}
 							if (customerInstance && customerInstance.id) {
 								feedbackInfo.customerid = customerInstance.id;
+								customerInfo.id = customerInstance.id;
 							}
-							Feedback.app.models.customer.upsert({
-								clientid: data.clientid,
-								email: data.customer.email,
-								id: customerInstance.id
-							}, (err, customerInstance) => {
+							Feedback.app.models.customer.upsert(customerInfo, (err, customerInstance) => {
 								if (err) {
 									return next(err);
 								}

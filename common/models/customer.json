@@ -18,8 +18,12 @@
     },
     "clientid": {
       "type": "string"
+    },
+    "secretemail": {
+      "type": "string"
     }
   },
+  "hidden": ["email"],
   "validations": [],
   "relations": {
     "client": {

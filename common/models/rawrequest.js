@@ -37,6 +37,7 @@ module.exports = (RawRequest) => {
 			}
 			if (customerInstance) {
 				customer.id = customerInstance.id;
+				customer.secretemail = RawRequest.app.models.customer.hideEmail(customer.email);
 			}
 			RawRequest.app.models.customer.upsert(customer, (err, customerInstance) => {
 				if (err) {
