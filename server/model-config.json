@@ -56,6 +56,10 @@
 		"dataSource": "api",
 		"public": true
 	},
+	"ratingcrit": {
+		"dataSource": "api",
+		"public": true
+	},
 	"request": {
 		"dataSource": "api",
 		"public": true

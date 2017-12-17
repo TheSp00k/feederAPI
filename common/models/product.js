@@ -1,17 +1,34 @@
 'use strict';
 
 module.exports = (Product) => {
+	Product.beforeRemote('totals', (context, unused, next) => {
+		let path = context.req.headers.host;
+		console.log(context.req.query);
+		
+		Product.app.models.client.findById(context.req.query.clientid, (err, clientInstance) => {
+			if (err) {
+				return next(err);
+			}
+			if (!clientInstance || !path.includes(clientInstance.domain)) {
+				let error = new Error('Client not found');
+				error.code = 404;
+				return next(error);
+			}
+			next();
+		});
+	});
 	Product.totals = (productid, clientid, productnumber, next) => {
 		let where = {id: productid};
 		if (productnumber && clientid) {
-			where.and = [{clientid: clientid}, {productnumber: productnumber}];
+			where.and = [{clientid}, {productnumber}];
 		}
 		let filter = {
 			where: where,
 			include: {
 				relation: 'feedbacks',
 				scope: {
-					where: {approved: true}
+					where: {approved: true},
+					include: 'ratings'
 				}
 			}
 		};
@@ -25,10 +42,25 @@ module.exports = (Product) => {
 			var totalStars = 0,
 				totalFeedbackCount = 0,
 				feedbacks = product.feedbacks(),
+				critTotals = {},
 				starTotals = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
 
 			for (var i = 0; i < feedbacks.length; i++) {
 				totalStars += feedbacks[i].totalratingscore;
+				let ratings = feedbacks[i].ratings();
+				console.log(ratings);
+				
+				if (ratings) {
+					for (var r = 0; r < ratings.length; r++) {
+						if (critTotals[ratings[r].critid]) {
+							critTotals[ratings[r].critid].count += 1;
+							critTotals[ratings[r].critid].scoreTotal += ratings[r].score;
+						} else {
+							critTotals[ratings[r].critid] = {count: 1, scoreTotal: ratings[r].score};
+						}
+					}
+				}
+				console.log(critTotals);
 				if ((Math.round(feedbacks[i].totalratingscore * 10) / 10) == 1) {
 					starTotals[1] += 1;
 				}
@@ -53,6 +85,7 @@ module.exports = (Product) => {
 			var result = {
 				totalratingscore: Math.round(totalProductScore * 10) / 10,
 				startotals: starTotals,
+				crittotals: critTotals,
 				totalFeedbackCount: totalFeedbackCount
 			};
 

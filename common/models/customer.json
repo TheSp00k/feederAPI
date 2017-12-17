@@ -30,6 +30,11 @@
       "type": "belongsTo",
       "model": "client",
       "foreignKey": "clientid"
+    },
+    "feedbacks": {
+      "type": "hasMany",
+      "model": "feedback",
+      "foreignKey": "customerid"
     }
   },
   "acls": [

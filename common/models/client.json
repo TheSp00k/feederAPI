@@ -64,6 +64,11 @@
 			"type": "hasMany",
 			"model": "product",
 			"foreignKey": "clientid"
+		},
+		"ratingcrits": {
+			"type": "hasMany",
+			"model": "ratingcrit",
+			"foreignKey": "clientid"
 		}
 	},
 	"acls": [

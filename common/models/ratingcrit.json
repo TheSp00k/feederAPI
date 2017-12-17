@@ -2,6 +2,7 @@
   "name": "ratingcrit",
   "base": "PersistedModel",
   "idInjection": true,
+  "forceId": false,
   "options": {
     "validateUpsert": true
   },
@@ -11,6 +12,9 @@
     },
     "clientid": {
       "type": "string"
+    },
+    "active": {
+      "type": "boolean"
     }
   },
   "validations": [],

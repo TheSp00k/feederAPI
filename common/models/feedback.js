@@ -2,6 +2,37 @@
 var async = require('async');
 module.exports = (Feedback) => {
 
+	Feedback.beforeRemote('**', (context, unused, next) => {		
+		let path = context.req.headers.host;
+		if (context.req.originalUrl == '/feedbacks/sendfeedback') {
+			return next();
+		}
+
+		Feedback.app.models.appuser.findById(context.req.accessToken.userId, (err, userInstance) => {
+			if (err) {
+				return next(err);
+			}
+			if (!userInstance && !userInstance.id) {
+				err = new Error('Unable to find user');
+				err.statusCode = 404;
+				err.code = 404;
+				return next(err);
+			}
+			Feedback.app.models.client.findById(userInstance.clientid, (err, clientInstance) => {
+				if (err) {
+					return next(err);
+				}				
+				if (!clientInstance || !path.includes(clientInstance.domain)) {
+					err = new Error('Client not found');
+					err.statusCode = 404;
+					err.code = 404;
+					return next(err);
+				}
+				next();
+			});
+		})
+	});
+
 	Feedback.afterRemote('sendFeedback', (context, instance, next) => {
 		var res = context.res;
 		if (context.args.type == 'json') {
